@@ -62,6 +62,7 @@ public class WaveSpawner : MonoBehaviour
     {
         activeEnemies--;
         if (!spawning && activeEnemies <= 0)
+            Debug.Log("TodosMuertos");
             StartCoroutine(NextWave());
     }
 
