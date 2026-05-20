@@ -39,6 +39,9 @@ public class WaveSpawner : MonoBehaviour
         }
 
         spawning = false;
+
+        if (activeEnemies <= 0)
+            StartCoroutine(NextWave());
     }
 
     void SpawnEnemy(EnemyData data)
@@ -62,7 +65,6 @@ public class WaveSpawner : MonoBehaviour
     {
         activeEnemies--;
         if (!spawning && activeEnemies <= 0)
-            Debug.Log("TodosMuertos");
             StartCoroutine(NextWave());
     }
 
