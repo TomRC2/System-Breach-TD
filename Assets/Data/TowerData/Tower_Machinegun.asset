@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62a38953d6018449b31f52a9b2d6a47, type: 3}
+  m_Name: Tower_Machinegun
+  m_EditorClassIdentifier: Assembly-CSharp::TowerData
+  towerName: Machinegun
+  prefab: {fileID: 7346411035423853115, guid: 57a14e3cdcf1a0745b1417f01258da0b, type: 3}
+  cost: 150
+  damage: 3
+  attackSpeed: 30
+  range: 3
+  critChance: 0
+  critMultiplier: 2
