@@ -492,6 +492,7 @@ GameObject:
   - component: {fileID: 8089036410896815591}
   - component: {fileID: 3205513341944572686}
   - component: {fileID: -4528512999743219887}
+  - component: {fileID: 6709988282574829610}
   m_Layer: 0
   m_Name: MachinegunTower
   m_TagString: Untagged
@@ -613,6 +614,18 @@ MonoBehaviour:
   focusMode: 0
   projectilePrefab: {fileID: 383268200711205551, guid: 3dd309a9c2b168846bf78c5c9a14b47e, type: 3}
   firePoint: {fileID: 4165080319107314583}
+--- !u!114 &6709988282574829610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7346411035423853115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f736845bbac82a40af59817ba1dcf07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TowerClickHandler
 --- !u!1 &9136435192074390142
 GameObject:
   m_ObjectHideFlags: 0

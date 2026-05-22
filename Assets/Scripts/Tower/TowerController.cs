@@ -9,6 +9,7 @@ public class TowerController : MonoBehaviour
     public FocusMode focusMode = FocusMode.Closest;
     public GameObject projectilePrefab;
     public Transform firePoint;
+    public TowerData GetData() => data;
 
     private float attackCooldown = 0f;
 

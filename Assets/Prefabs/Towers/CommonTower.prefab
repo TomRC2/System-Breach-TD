@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3268550082092946798}
   - component: {fileID: 1342251408480580877}
   - component: {fileID: 6283305237229876424}
+  - component: {fileID: 7341637970407676085}
   m_Layer: 0
   m_Name: CommonTower
   m_TagString: Untagged
@@ -131,6 +132,18 @@ MonoBehaviour:
   focusMode: 0
   projectilePrefab: {fileID: 383268200711205551, guid: 3dd309a9c2b168846bf78c5c9a14b47e, type: 3}
   firePoint: {fileID: 4918548955084678931}
+--- !u!114 &7341637970407676085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925704779604272732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f736845bbac82a40af59817ba1dcf07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TowerClickHandler
 --- !u!1 &3249279161321320647
 GameObject:
   m_ObjectHideFlags: 0

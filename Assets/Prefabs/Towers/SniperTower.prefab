@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7341395623320663492}
   - component: {fileID: 7195328658231571171}
   - component: {fileID: -3232420740256071443}
+  - component: {fileID: -6309022192721006659}
   m_Layer: 0
   m_Name: SniperTower
   m_TagString: Untagged
@@ -131,6 +132,18 @@ MonoBehaviour:
   focusMode: 0
   projectilePrefab: {fileID: 383268200711205551, guid: 3dd309a9c2b168846bf78c5c9a14b47e, type: 3}
   firePoint: {fileID: 5524415899299256865}
+--- !u!114 &-6309022192721006659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2045985719052300516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f736845bbac82a40af59817ba1dcf07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TowerClickHandler
 --- !u!1 &2782320281409963023
 GameObject:
   m_ObjectHideFlags: 0
