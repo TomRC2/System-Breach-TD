@@ -1,12 +1,14 @@
-using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
 {
     public List<WaveData> waves;
     public Transform[] waypoints;
     public float timeBetweenWaves = 5f;
+    public event Action<int, int> OnWaveChanged;
 
     private int currentWave = 0;
     private int activeEnemies = 0;
@@ -19,9 +21,10 @@ public class WaveSpawner : MonoBehaviour
 
     IEnumerator StartWave()
     {
+        OnWaveChanged?.Invoke(currentWave + 1, waves.Count);
         if (currentWave >= waves.Count)
         {
-            Debug.Log("NIVEL COMPLETADO");
+            GameManager.Instance.Victory();
             yield break;
         }
 

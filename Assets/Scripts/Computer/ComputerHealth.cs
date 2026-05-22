@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 
 public class ComputerHealth : MonoBehaviour
 {
     public float maxHP = 1000f;
     private float currentHP;
-
+    public event Action<float, float> OnHPChanged;
     void Start()
     {
         currentHP = maxHP;
@@ -15,10 +16,11 @@ public class ComputerHealth : MonoBehaviour
         currentHP -= amount;
         Debug.Log($"PC HP: {currentHP}");
         if (currentHP <= 0) GameOver();
+        OnHPChanged?.Invoke(currentHP, maxHP);
     }
 
     void GameOver()
     {
-        Debug.Log("GAME OVER");
+        GameManager.Instance.GameOver();
     }
 }

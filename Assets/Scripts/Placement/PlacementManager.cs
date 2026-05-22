@@ -36,12 +36,16 @@ public class PlacementManager : MonoBehaviour
                     if (placed)
                     {
                         DeselectTower();
+                        TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
                     }
                 }
             }
         }
 
         if (Input.GetMouseButtonDown(1))
+        {
             DeselectTower();
+            TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
+        }
     }
 }
