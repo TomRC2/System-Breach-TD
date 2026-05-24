@@ -15,8 +15,30 @@ MonoBehaviour:
   towerName: Melee
   prefab: {fileID: 8564541740028555003, guid: dab628a151ec56c4dae4c3ba9ff6b730, type: 3}
   cost: 150
-  damage: 5
-  attackSpeed: 10
-  range: 1
-  critChance: 0
   critMultiplier: 2
+  levels:
+  - damage: 5
+    attackSpeed: 10
+    range: 1
+    critChance: 0
+    upgradeCost: 75
+  - damage: 10
+    attackSpeed: 12
+    range: 2
+    critChance: 0.05
+    upgradeCost: 100
+  - damage: 20
+    attackSpeed: 15
+    range: 3
+    critChance: 0.1
+    upgradeCost: 150
+  - damage: 35
+    attackSpeed: 22
+    range: 4
+    critChance: 0.2
+    upgradeCost: 200
+  - damage: 50
+    attackSpeed: 30
+    range: 5
+    critChance: 0.3
+    upgradeCost: 0

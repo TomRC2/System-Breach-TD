@@ -11,6 +11,9 @@ public class HUDManager : MonoBehaviour
     [Header("Wave")]
     public TMP_Text waveText;
 
+    [Header("Money")]
+    public TMP_Text moneyText;
+
     void Start()
     {
         ComputerHealth computer = FindFirstObjectByType<ComputerHealth>();
@@ -26,13 +29,18 @@ public class HUDManager : MonoBehaviour
             spawner.OnWaveChanged += UpdateWave;
             UpdateWave(1, spawner.waves.Count);
         }
+
+        if (EconomyManager.Instance != null)
+        {
+            EconomyManager.Instance.OnMoneyChanged += UpdateMoney;
+            UpdateMoney(EconomyManager.Instance.GetMoney());
+        }
     }
 
     void UpdateHP(float current, float max)
     {
         if (hpText != null)
             hpText.text = $"{Mathf.CeilToInt(current)} / {Mathf.CeilToInt(max)}";
-
         if (hpSlider != null)
             hpSlider.value = current / max;
     }
@@ -41,5 +49,11 @@ public class HUDManager : MonoBehaviour
     {
         if (waveText != null)
             waveText.text = $"Wave {current} / {total}";
+    }
+
+    void UpdateMoney(int amount)
+    {
+        if (moneyText != null)
+            moneyText.text = $"${amount}";
     }
 }

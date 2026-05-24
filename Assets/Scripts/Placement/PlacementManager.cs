@@ -32,9 +32,16 @@ public class PlacementManager : MonoBehaviour
                 GridCell cell = hit.collider.GetComponent<GridCell>();
                 if (cell != null)
                 {
+                    if (!EconomyManager.Instance.CanAfford(selectedTower.cost))
+                    {
+                        Debug.Log("Dinero insuficiente");
+                        return;
+                    }
+
                     bool placed = cell.PlaceTower(selectedTower.prefab, selectedTower);
                     if (placed)
                     {
+                        EconomyManager.Instance.Spend(selectedTower.cost);
                         DeselectTower();
                         TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
                     }

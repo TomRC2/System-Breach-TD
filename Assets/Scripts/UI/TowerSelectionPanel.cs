@@ -29,6 +29,9 @@ public class TowerSelectionPanel : MonoBehaviour
         panel.SetActive(false);
         GenerateButtons();
         HideGrid();
+
+        if (EconomyManager.Instance != null)
+            EconomyManager.Instance.OnMoneyChanged += _ => RefreshButtons();
     }
 
     void GenerateButtons()
@@ -38,10 +41,21 @@ public class TowerSelectionPanel : MonoBehaviour
             GameObject btn = Instantiate(towerButtonPrefab, buttonContainer);
 
             TMP_Text label = btn.GetComponentInChildren<TMP_Text>();
-            if (label != null) label.text = data.towerName;
+            if (label != null) label.text = $"{data.towerName}\n${data.cost}";
 
             TowerData captured = data;
-            btn.GetComponent<Button>().onClick.AddListener(() => SelectTower(captured));
+            Button button = btn.GetComponent<Button>();
+            button.onClick.AddListener(() => SelectTower(captured));
+        }
+    }
+
+    void RefreshButtons()
+    {
+        Button[] buttons = buttonContainer.GetComponentsInChildren<Button>();
+        for (int i = 0; i < buttons.Length && i < availableTowers.Length; i++)
+        {
+            buttons[i].interactable =
+                EconomyManager.Instance.CanAfford(availableTowers[i].cost);
         }
     }
 

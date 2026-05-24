@@ -15,8 +15,30 @@ MonoBehaviour:
   towerName: Machinegun
   prefab: {fileID: 7346411035423853115, guid: 57a14e3cdcf1a0745b1417f01258da0b, type: 3}
   cost: 150
-  damage: 3
-  attackSpeed: 30
-  range: 3
-  critChance: 0
   critMultiplier: 2
+  levels:
+  - damage: 3
+    attackSpeed: 30
+    range: 3
+    critChance: 0
+    upgradeCost: 75
+  - damage: 5
+    attackSpeed: 45
+    range: 4
+    critChance: 0.05
+    upgradeCost: 100
+  - damage: 8
+    attackSpeed: 60
+    range: 5
+    critChance: 0.1
+    upgradeCost: 150
+  - damage: 12
+    attackSpeed: 75
+    range: 6
+    critChance: 0.2
+    upgradeCost: 200
+  - damage: 15
+    attackSpeed: 100
+    range: 7
+    critChance: 0.3
+    upgradeCost: 0

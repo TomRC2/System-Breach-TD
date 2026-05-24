@@ -15,8 +15,30 @@ MonoBehaviour:
   towerName: Common
   prefab: {fileID: 925704779604272732, guid: 80886b63b054de149adc53ae49371287, type: 3}
   cost: 100
-  damage: 10
-  attackSpeed: 3
-  range: 5
-  critChance: 0
   critMultiplier: 2
+  levels:
+  - damage: 10
+    attackSpeed: 3
+    range: 5
+    critChance: 0
+    upgradeCost: 75
+  - damage: 15
+    attackSpeed: 5
+    range: 7
+    critChance: 0.05
+    upgradeCost: 100
+  - damage: 22
+    attackSpeed: 8
+    range: 10
+    critChance: 0.1
+    upgradeCost: 150
+  - damage: 30
+    attackSpeed: 12
+    range: 14
+    critChance: 0.2
+    upgradeCost: 200
+  - damage: 50
+    attackSpeed: 15
+    range: 20
+    critChance: 0.3
+    upgradeCost: 0

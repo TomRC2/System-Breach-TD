@@ -24,6 +24,8 @@ public class EnemyHealth : MonoBehaviour
     void Die()
     {
         OnDeath?.Invoke();
+        if (EconomyManager.Instance != null)
+            EconomyManager.Instance.Earn((int)reward);
         Destroy(gameObject);
     }
 

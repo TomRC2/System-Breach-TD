@@ -1,26 +1,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 public enum FocusMode { Closest, Farthest, MostHP, LeastHP, Fastest }
 
 public class TowerController : MonoBehaviour
 {
     private TowerData data;
+    private int currentLevel = 0; // índice del array, nivel 1 = índice 0
+
     public FocusMode focusMode = FocusMode.Closest;
     public GameObject projectilePrefab;
     public Transform firePoint;
-    public TowerData GetData() => data;
+    public TowerLevel GetCurrentStats() => CurrentStats();
 
     private float attackCooldown = 0f;
 
     public void Initialize(TowerData towerData)
     {
         data = towerData;
+        currentLevel = 0;
     }
+
+    public TowerData GetData() => data;
+    public int GetCurrentLevel() => currentLevel + 1; 
+    public bool CanUpgrade() => currentLevel < data.levels.Length - 1;
+    public int GetUpgradeCost() => CanUpgrade() ? data.levels[currentLevel].upgradeCost : 0;
+
+    public void Upgrade()
+    {
+        if (!CanUpgrade()) return;
+        currentLevel++;
+    }
+
+    TowerLevel CurrentStats() => data.levels[currentLevel];
 
     void Update()
     {
-        if (data == null) return;
+        if (data == null || data.levels.Length == 0) return;
 
         attackCooldown -= Time.deltaTime;
 
@@ -30,14 +47,14 @@ public class TowerController : MonoBehaviour
             if (target != null)
             {
                 Shoot(target);
-                attackCooldown = 1f / data.attackSpeed;
+                attackCooldown = 1f / CurrentStats().attackSpeed;
             }
         }
     }
 
     GameObject GetTarget()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, data.range);
+        Collider[] hits = Physics.OverlapSphere(transform.position, CurrentStats().range);
         List<GameObject> enemies = hits
             .Where(h => h.CompareTag("Enemy"))
             .Select(h => h.gameObject)
@@ -66,21 +83,22 @@ public class TowerController : MonoBehaviour
         Vector3 dir = (target.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
 
-        GameObject proj = Instantiate(projectilePrefab,
-            firePoint.position, Quaternion.identity);
+        GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         proj.GetComponent<Projectile>().Initialize(target, CalculateDamage());
     }
 
     float CalculateDamage()
     {
-        bool isCrit = Random.value < data.critChance;
-        return isCrit ? data.damage * data.critMultiplier : data.damage;
+        bool isCrit = Random.value < CurrentStats().critChance;
+        return isCrit
+            ? CurrentStats().damage * data.critMultiplier
+            : CurrentStats().damage;
     }
 
     void OnDrawGizmosSelected()
     {
-        if (data == null) return;
+        if (data == null || data.levels.Length == 0) return;
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, data.range);
+        Gizmos.DrawWireSphere(transform.position, CurrentStats().range);
     }
 }

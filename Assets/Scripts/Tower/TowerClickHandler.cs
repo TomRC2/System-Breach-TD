@@ -16,7 +16,6 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
     void Start()
     {
         towerController = GetComponentInParent<TowerController>();
-
         renderers = GetComponentsInParent<Renderer>();
         originalColors = new Color[renderers.Length];
         for (int i = 0; i < renderers.Length; i++)
@@ -31,9 +30,7 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit) || hit.collider.gameObject != gameObject)
-                {
                     Deselect();
-                }
             }
         }
     }
@@ -59,11 +56,11 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
         foreach (Renderer rend in renderers)
             rend.material.color = highlightColor;
 
-        float range = towerController.GetData().range;
+        float range = towerController.GetCurrentStats().range;
+
         rangeSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         rangeSphere.transform.position = towerController.transform.position;
         rangeSphere.transform.localScale = Vector3.one * range * 2f;
-
         Destroy(rangeSphere.GetComponent<Collider>());
 
         Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
@@ -87,7 +84,6 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
             renderers[i].material.color = originalColors[i];
 
         if (rangeSphere != null) Destroy(rangeSphere);
-
         TowerInfoPanel.Instance.Close();
     }
 }

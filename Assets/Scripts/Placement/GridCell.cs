@@ -27,12 +27,19 @@ public class GridCell : MonoBehaviour
         return true;
     }
 
-    public void RemoveTower()
+    public void FreeCellAndDestroy()
     {
         if (!isOccupied) return;
         Destroy(placedTower);
+        placedTower = null;
         isOccupied = false;
         UpdateVisual();
+    }
+
+    public bool IsOccupiedBy(GameObject tower)
+    {
+        if (!isOccupied || placedTower == null) return false;
+        return placedTower == tower || placedTower == tower.transform.root.gameObject;
     }
 
     void UpdateVisual()
@@ -52,4 +59,3 @@ public class GridCell : MonoBehaviour
         UpdateVisual();
     }
 }
-
