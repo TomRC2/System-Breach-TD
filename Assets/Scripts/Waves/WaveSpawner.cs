@@ -27,12 +27,9 @@ public class WaveSpawner : MonoBehaviour
     }
     IEnumerator StartWave()
     {
+        if (currentWave >= waves.Count) yield break;
         OnWaveChanged?.Invoke(currentWave + 1, waves.Count);
-        if (currentWave >= waves.Count)
-        {
-            GameManager.Instance.Victory();
-            yield break;
-        }
+        spawning = true;
 
         spawning = true;
         WaveData wave = waves[currentWave];
@@ -74,7 +71,12 @@ public class WaveSpawner : MonoBehaviour
     {
         activeEnemies--;
         if (!spawning && activeEnemies <= 0)
-            StartCoroutine(NextWave());
+        {
+            if (currentWave >= waves.Count)
+                GameManager.Instance.Victory();
+            else
+                StartCoroutine(NextWave());
+        }
     }
 
     public void SkipWaitTime()

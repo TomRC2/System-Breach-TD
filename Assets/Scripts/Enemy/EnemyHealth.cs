@@ -32,7 +32,7 @@ public class EnemyHealth : MonoBehaviour
     public void ReachComputer()
     {
         ComputerHealth computer = FindFirstObjectByType<ComputerHealth>();
-        if (computer != null) computer.TakeDamage(currentHP);
+        if (computer != null) computer.TakeDamage(maxHP);
         OnReach?.Invoke();
         Destroy(gameObject);
     }

@@ -9,6 +9,11 @@ public class TowerInfoPanel : MonoBehaviour
     [Header("Panel")]
     public GameObject panel;
 
+    [Header("Focus")]
+    public TMP_Text focusModeText;
+    public Button focusPrevButton;
+    public Button focusNextButton;
+
     [Header("Texts")]
     public TMP_Text towerNameText;
     public TMP_Text damageText;
@@ -43,6 +48,11 @@ public class TowerInfoPanel : MonoBehaviour
         currentTower = tower;
         RefreshPanel();
         panel.SetActive(true);
+
+        focusPrevButton.onClick.RemoveAllListeners();
+        focusNextButton.onClick.RemoveAllListeners();
+        focusPrevButton.onClick.AddListener(() => CycleFocus(-1));
+        focusNextButton.onClick.AddListener(() => CycleFocus(1));
     }
 
     public void Close()
@@ -70,6 +80,7 @@ public class TowerInfoPanel : MonoBehaviour
         sellButton.onClick.AddListener(() => SellTower(sellValue));
 
         RefreshButtons();
+        RefreshFocus();
     }
 
     void RefreshButtons()
@@ -88,6 +99,19 @@ public class TowerInfoPanel : MonoBehaviour
         upgradeButton.onClick.RemoveAllListeners();
         if (canUpgrade && canAfford)
             upgradeButton.onClick.AddListener(() => UpgradeTower());
+    }
+
+    void CycleFocus(int direction)
+    {
+        int total = System.Enum.GetValues(typeof(FocusMode)).Length;
+        int current = (int)currentTower.focusMode;
+        currentTower.focusMode = (FocusMode)((current + direction + total) % total);
+        focusModeText.text = currentTower.focusMode.ToString();
+    }
+
+    void RefreshFocus()
+    {
+        focusModeText.text = currentTower.focusMode.ToString();
     }
 
     void UpgradeTower()

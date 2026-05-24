@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum FocusMode { Closest, Farthest, MostHP, LeastHP, Fastest }
+public enum FocusMode { Closest, Farthest, MostHP, LeastHP, Fastest, First }
 
 public class TowerController : MonoBehaviour
 {
     private TowerData data;
     private int currentLevel = 0; // índice del array, nivel 1 = índice 0
 
-    public FocusMode focusMode = FocusMode.Closest;
+    public FocusMode focusMode = FocusMode.First;
     public GameObject projectilePrefab;
     public Transform firePoint;
     public TowerLevel GetCurrentStats() => CurrentStats();
@@ -74,6 +74,8 @@ public class TowerController : MonoBehaviour
                 e.GetComponent<EnemyHealth>().GetCurrentHP()).First(),
             FocusMode.Fastest => enemies.OrderByDescending(e =>
                 e.GetComponent<EnemyMovement>().speed).First(),
+            FocusMode.First => enemies.OrderByDescending(e =>
+                e.GetComponent<EnemyMovement>().CurrentWaypointIndex()).First(),
             _ => enemies[0]
         };
     }
