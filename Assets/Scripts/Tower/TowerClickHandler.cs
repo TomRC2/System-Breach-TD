@@ -86,4 +86,11 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
         if (rangeSphere != null) Destroy(rangeSphere);
         TowerInfoPanel.Instance.Close();
     }
+
+    public void RefreshRange()
+    {
+        if (rangeSphere == null) return;
+        float range = towerController.GetCurrentStats().range;
+        rangeSphere.transform.localScale = Vector3.one * range * 2f;
+    }
 }

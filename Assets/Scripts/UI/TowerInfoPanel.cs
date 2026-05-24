@@ -96,6 +96,7 @@ public class TowerInfoPanel : MonoBehaviour
         if (!EconomyManager.Instance.Spend(cost)) return;
 
         currentTower.Upgrade();
+        currentTower.GetComponent<TowerClickHandler>().RefreshRange();
         RefreshPanel();
     }
 
@@ -114,7 +115,7 @@ public class TowerInfoPanel : MonoBehaviour
                 break;
             }
         }
-
+        currentTower.GetComponent<TowerClickHandler>().Deselect();
         Close();
     }
 }
