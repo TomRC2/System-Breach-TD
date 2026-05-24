@@ -8,6 +8,10 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicSource;
     public AudioSource sfxSource;
 
+    [Header("Music")]
+    public AudioClip menuMusic;
+    public AudioClip gameplayMusic;
+
     private const string KEY_MUSIC = "vol_music";
     private const string KEY_SFX = "vol_sfx";
 
@@ -52,4 +56,22 @@ public class AudioManager : MonoBehaviour
     {
         sfxSource.PlayOneShot(clip);
     }
+    public void PlayMenuMusic()
+    {
+        if (musicSource.clip == menuMusic)
+            return;
+
+        musicSource.clip = menuMusic;
+        musicSource.Play();
+    }
+
+    public void PlayGameplayMusic()
+    {
+        if (musicSource.clip == gameplayMusic)
+            return;
+
+        musicSource.clip = gameplayMusic;
+        musicSource.Play();
+    }
 }
+

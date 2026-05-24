@@ -14,6 +14,7 @@ public class MenuManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        AudioManager.Instance.PlayMenuMusic();
     }
 
     void Start()

@@ -41,6 +41,7 @@ public class LevelSelectManager : MonoBehaviour
     {
         // Convención de nombre de escena: "Level1", "Level2", etc.
         SceneManager.LoadScene("Level" + levelNumber);
+        AudioManager.Instance.PlayGameplayMusic();
     }
 
     // Llamar esto al completar un nivel para desbloquear el siguiente
