@@ -35,13 +35,14 @@ public class OptionsManager : MonoBehaviour
     void ApplyMusic(float value)
     {
         // TODO: conectar con AudioManager cuando esté listo (Lolo)
-        PlayerPrefs.SetFloat(KEY_MUSIC, value);
+        AudioManager.Instance.SetMusicVolume(value);
     }
 
     void ApplySFX(float value)
     {
         // TODO: conectar con AudioManager cuando esté listo (Lolo)
-        PlayerPrefs.SetFloat(KEY_SFX, value);
+        AudioManager.Instance.SetSFXVolume(value);
+        // PlayerPrefs.SetFloat(KEY_SFX, value);
     }
 
     void ApplyAutoSkip(bool value)
