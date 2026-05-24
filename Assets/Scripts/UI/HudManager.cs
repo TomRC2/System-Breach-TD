@@ -54,6 +54,6 @@ public class HUDManager : MonoBehaviour
     void UpdateMoney(int amount)
     {
         if (moneyText != null)
-            moneyText.text = $"${amount}";
+            moneyText.text = $"RAM: ${amount}";
     }
 }
