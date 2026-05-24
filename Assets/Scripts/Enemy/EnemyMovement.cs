@@ -11,6 +11,12 @@ public class EnemyMovement : MonoBehaviour
         waypoints = points;
     }
 
+    public Transform GetCurrentWaypoint()
+    {
+        if (waypoints == null || currentWaypoint >= waypoints.Length)
+            return transform;
+        return waypoints[currentWaypoint];
+    }
     void Update()
     {
         if (waypoints == null || currentWaypoint >= waypoints.Length) return;

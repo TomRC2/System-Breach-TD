@@ -75,7 +75,11 @@ public class TowerController : MonoBehaviour
             FocusMode.Fastest => enemies.OrderByDescending(e =>
                 e.GetComponent<EnemyMovement>().speed).First(),
             FocusMode.First => enemies.OrderByDescending(e =>
-                e.GetComponent<EnemyMovement>().CurrentWaypointIndex()).First(),
+                e.GetComponent<EnemyMovement>().CurrentWaypointIndex())
+                .ThenBy(e => Vector3.Distance(
+                e.transform.position,
+                e.GetComponent<EnemyMovement>().GetCurrentWaypoint().position))
+                .First(),
             _ => enemies[0]
         };
     }

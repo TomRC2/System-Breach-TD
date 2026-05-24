@@ -611,7 +611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64abd6ddd6a9f18499c69e47d35a0089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerController
-  focusMode: 0
+  focusMode: 5
   projectilePrefab: {fileID: 383268200711205551, guid: 3dd309a9c2b168846bf78c5c9a14b47e, type: 3}
   firePoint: {fileID: 4165080319107314583}
 --- !u!114 &6709988282574829610
@@ -626,6 +626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f736845bbac82a40af59817ba1dcf07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerClickHandler
+  highlightColor: {r: 0.4, g: 0.8, b: 1, a: 1}
 --- !u!1 &9136435192074390142
 GameObject:
   m_ObjectHideFlags: 0
