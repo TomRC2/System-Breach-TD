@@ -47,7 +47,12 @@ public class WaveSpawner : MonoBehaviour
         spawning = false;
 
         if (activeEnemies <= 0)
-            StartCoroutine(NextWave());
+        {
+            if (currentWave >= waves.Count - 1)
+                GameManager.Instance.Victory();
+            else
+                StartCoroutine(NextWave());
+        }
     }
 
     void SpawnEnemy(EnemyData data)
@@ -70,11 +75,11 @@ public class WaveSpawner : MonoBehaviour
     void OnEnemyDefeated()
     {
         activeEnemies--;
-        if (!spawning && activeEnemies <= 0)
+        if (activeEnemies <= 0)
         {
-            if (currentWave >= waves.Count)
+            if (currentWave >= waves.Count - 1 && !spawning)
                 GameManager.Instance.Victory();
-            else
+            else if (!spawning)
                 StartCoroutine(NextWave());
         }
     }
