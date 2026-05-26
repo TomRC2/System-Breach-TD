@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: Tank
   prefab: {fileID: 9179707806237692469, guid: fac788d5462fe544db6ee6bfee1c213e, type: 3}
-  hp: 100
-  speed: 3
-  reward: 250
+  hp: 500
+  speed: 2
+  reward: 40

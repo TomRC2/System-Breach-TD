@@ -14,31 +14,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerData
   towerName: Sniper
   prefab: {fileID: 2045985719052300516, guid: c3a35dc3df8a76a4a9d62ab2b854632d, type: 3}
-  cost: 200
+  cost: 100
   critMultiplier: 2
   levels:
-  - damage: 25
+  - damage: 15
     attackSpeed: 1
     range: 50
     critChance: 0
-    upgradeCost: 100
-  - damage: 45
-    attackSpeed: 2
-    range: 100
+    upgradeCost: 300
+  - damage: 20
+    attackSpeed: 1.5
+    range: 50
     critChance: 0.05
-    upgradeCost: 150
-  - damage: 60
-    attackSpeed: 3
-    range: 150
+    upgradeCost: 750
+  - damage: 30
+    attackSpeed: 2
+    range: 50
     critChance: 0.1
-    upgradeCost: 200
+    upgradeCost: 1000
+  - damage: 50
+    attackSpeed: 2.5
+    range: 50
+    critChance: 0.2
+    upgradeCost: 2000
   - damage: 75
     attackSpeed: 5
-    range: 200
-    critChance: 0.2
-    upgradeCost: 250
-  - damage: 100
-    attackSpeed: 8
-    range: 500
+    range: 100
     critChance: 0.3
     upgradeCost: 0

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: Fast
   prefab: {fileID: 8884929273266195902, guid: 6a2fb22523d17c54ca6012c617634bcb, type: 3}
-  hp: 25
-  speed: 10
-  reward: 50
+  hp: 45
+  speed: 6
+  reward: 10

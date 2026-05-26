@@ -17,8 +17,13 @@ public class WaveSpawner : MonoBehaviour
     private int activeEnemies = 0;
     private bool spawning = false;
     private bool skipWait = false;
-    void Start()
+
+    [Header("UI")]
+    public GameObject startButton;
+
+    public void BeginGame()
     {
+        startButton.SetActive(false);
         StartCoroutine(StartWave());
     }
     void Awake()

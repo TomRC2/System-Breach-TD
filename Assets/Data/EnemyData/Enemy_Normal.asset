@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: Normal
   prefab: {fileID: 992962485270998004, guid: 8523b1e99c743034b95a647f99553d62, type: 3}
-  hp: 50
-  speed: 5
-  reward: 100
+  hp: 75
+  speed: 3
+  reward: 15

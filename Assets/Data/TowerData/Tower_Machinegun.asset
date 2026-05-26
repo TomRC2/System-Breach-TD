@@ -14,31 +14,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerData
   towerName: Machinegun
   prefab: {fileID: 7346411035423853115, guid: 57a14e3cdcf1a0745b1417f01258da0b, type: 3}
-  cost: 150
+  cost: 75
   critMultiplier: 2
   levels:
   - damage: 3
-    attackSpeed: 30
+    attackSpeed: 15
     range: 3
     critChance: 0
-    upgradeCost: 75
+    upgradeCost: 300
   - damage: 5
-    attackSpeed: 45
+    attackSpeed: 20
     range: 4
     critChance: 0.05
-    upgradeCost: 100
+    upgradeCost: 700
   - damage: 8
-    attackSpeed: 60
+    attackSpeed: 25
     range: 5
     critChance: 0.1
-    upgradeCost: 150
+    upgradeCost: 1250
   - damage: 12
-    attackSpeed: 75
+    attackSpeed: 30
     range: 6
     critChance: 0.2
-    upgradeCost: 200
+    upgradeCost: 2000
   - damage: 15
-    attackSpeed: 100
+    attackSpeed: 50
     range: 7
     critChance: 0.3
     upgradeCost: 0

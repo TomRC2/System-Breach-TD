@@ -10,10 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26301edd393d7a14b9e0667e2287c1ee, type: 3}
-  m_Name: Wave1
+  m_Name: Wave9
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   groups:
   - enemyData: {fileID: 11400000, guid: 0daf8772ed80fc04cb7f222f32d7ca00, type: 2}
-    count: 5
-    spawnInterval: 1.5
-  timeBetweenGroups: 0
+    count: 10
+    spawnInterval: 0.7
+  - enemyData: {fileID: 11400000, guid: e38f5e73427d887498447e47b99f8c83, type: 2}
+    count: 6
+    spawnInterval: 0.7
+  - enemyData: {fileID: 11400000, guid: aa17e77f739308b4c942f022dab1f5d5, type: 2}
+    count: 3
+    spawnInterval: 0.7
+  timeBetweenGroups: 0.7

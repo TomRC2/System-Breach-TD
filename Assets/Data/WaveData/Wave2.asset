@@ -13,10 +13,7 @@ MonoBehaviour:
   m_Name: Wave2
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   groups:
-  - enemyData: {fileID: 11400000, guid: e38f5e73427d887498447e47b99f8c83, type: 2}
-    count: 3
-    spawnInterval: 1
   - enemyData: {fileID: 11400000, guid: 0daf8772ed80fc04cb7f222f32d7ca00, type: 2}
-    count: 5
-    spawnInterval: 1
+    count: 8
+    spawnInterval: 1.2
   timeBetweenGroups: 2
