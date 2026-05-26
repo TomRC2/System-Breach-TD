@@ -22972,6 +22972,7 @@ MonoBehaviour:
   - {fileID: 2105688840}
   - {fileID: 1580153798}
   timeBetweenWaves: 30
+  startButton: {fileID: 853029001}
 --- !u!4 &1825890944
 Transform:
   m_ObjectHideFlags: 0
