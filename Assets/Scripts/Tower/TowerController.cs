@@ -13,6 +13,7 @@ public class TowerController : MonoBehaviour
     public GameObject projectilePrefab;
     public Transform firePoint;
     public TowerLevel GetCurrentStats() => CurrentStats();
+    private TowerLevel activeBoost = null;
 
     private float attackCooldown = 0f;
 
@@ -23,10 +24,11 @@ public class TowerController : MonoBehaviour
     }
 
     public TowerData GetData() => data;
-    public int GetCurrentLevel() => currentLevel + 1; 
+    public int GetCurrentLevel() => currentLevel + 1;
     public bool CanUpgrade() => currentLevel < data.levels.Length - 1;
     public int GetUpgradeCost() => CanUpgrade() ? data.levels[currentLevel].upgradeCost : 0;
-
+    public bool IsBoosted() => activeBoost != null;
+    public TowerLevel GetActiveBoost() => activeBoost;
     public void Upgrade()
     {
         if (!CanUpgrade()) return;
@@ -47,14 +49,14 @@ public class TowerController : MonoBehaviour
             if (target != null)
             {
                 Shoot(target);
-                attackCooldown = 1f / CurrentStats().attackSpeed;
+                attackCooldown = 1f / GetEffectiveStats().attackSpeed;
             }
         }
     }
 
     GameObject GetTarget()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, CurrentStats().range);
+        Collider[] hits = Physics.OverlapSphere(transform.position, GetEffectiveStats().range);
         List<GameObject> enemies = hits
             .Where(h => h.CompareTag("Enemy"))
             .Select(h => h.gameObject)
@@ -95,16 +97,40 @@ public class TowerController : MonoBehaviour
 
     float CalculateDamage()
     {
-        bool isCrit = Random.value < CurrentStats().critChance;
+        bool isCrit = Random.value < GetEffectiveStats().critChance;
         return isCrit
-            ? CurrentStats().damage * data.critMultiplier
-            : CurrentStats().damage;
+            ? GetEffectiveStats().damage * data.critMultiplier
+            : GetEffectiveStats().damage;
+    }
+    public TowerLevel GetEffectiveStats()
+    {
+        TowerLevel base_ = CurrentStats();
+        if (activeBoost == null) return base_;
+
+        return new TowerLevel
+        {
+            damage = base_.damage * (1f + activeBoost.damageBonus),
+            attackSpeed = base_.attackSpeed * (1f + activeBoost.attackSpeedBonus),
+            range = base_.range * (1f + activeBoost.rangeBonus),
+            critChance = base_.critChance,
+            upgradeCost = base_.upgradeCost
+        };
+    }
+
+    public void ApplyBoost(TowerLevel boost)
+    {
+        activeBoost = boost;
+    }
+
+    public void RemoveBoost()
+    {
+        activeBoost = null;
     }
 
     void OnDrawGizmosSelected()
     {
         if (data == null || data.levels.Length == 0) return;
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, CurrentStats().range);
+        Gizmos.DrawWireSphere(transform.position, GetEffectiveStats().range);
     }
 }

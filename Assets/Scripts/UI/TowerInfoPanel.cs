@@ -13,6 +13,7 @@ public class TowerInfoPanel : MonoBehaviour
     public TMP_Text focusModeText;
     public Button focusPrevButton;
     public Button focusNextButton;
+    public GameObject focusContainer;
 
     [Header("Texts")]
     public TMP_Text towerNameText;
@@ -26,6 +27,7 @@ public class TowerInfoPanel : MonoBehaviour
     public Button sellButton;
 
     private TowerController currentTower;
+    private BoosterTower currentBooster;
 
     void Awake()
     {
@@ -38,40 +40,104 @@ public class TowerInfoPanel : MonoBehaviour
         upgradeButton.interactable = false;
         sellButton.interactable = false;
 
-        // Refrescar botones cuando cambia el dinero
         if (EconomyManager.Instance != null)
             EconomyManager.Instance.OnMoneyChanged += _ => RefreshButtons();
     }
 
     public void Show(TowerController tower)
     {
+        PlacementManager.Instance.DeselectTower();
+        TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
+        TowerSelectionPanel.Instance.panel.SetActive(false);
         currentTower = tower;
-        RefreshPanel();
-        panel.SetActive(true);
+        currentBooster = null;
+        focusContainer.SetActive(true);
 
         focusPrevButton.onClick.RemoveAllListeners();
         focusNextButton.onClick.RemoveAllListeners();
         focusPrevButton.onClick.AddListener(() => CycleFocus(-1));
         focusNextButton.onClick.AddListener(() => CycleFocus(1));
+
+        RefreshPanel();
+        panel.SetActive(true);
+    }
+
+    public void ShowBooster(BoosterTower booster)
+    {
+        PlacementManager.Instance.DeselectTower();
+        TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
+        TowerSelectionPanel.Instance.panel.SetActive(false);
+        currentBooster = booster;
+        currentTower = null;
+        focusContainer.SetActive(false);
+        panel.SetActive(true);
+
+        TowerData data = booster.GetData();
+        TowerLevel level = booster.GetCurrentLevelStats();
+
+        towerNameText.text = data.towerName;
+        damageText.text = level.damageBonus > 0 ? $"Damage bonus: +{level.damageBonus * 100:F0}%" : "Damage bonus: -";
+        attackSpeedText.text = level.attackSpeedBonus > 0 ? $"Speed bonus: +{level.attackSpeedBonus * 100:F0}%" : "Speed bonus: -";
+        rangeText.text = level.rangeBonus > 0 ? $"Range bonus: +{level.rangeBonus * 100:F0}%" : "Range bonus: -";
+        levelText.text = $"Level: {booster.GetCurrentLevel()} / {data.levels.Length}";
+
+        bool canUpgrade = booster.GetCurrentLevel() < booster.GetData().levels.Length;
+        bool canAfford = EconomyManager.Instance.CanAfford(booster.GetCurrentLevelStats().upgradeCost);
+
+        upgradeButton.interactable = canUpgrade && canAfford;
+        upgradeButton.onClick.RemoveAllListeners();
+        if (canUpgrade && canAfford)
+            upgradeButton.onClick.AddListener(() =>
+            {
+                EconomyManager.Instance.Spend(booster.GetCurrentLevelStats().upgradeCost);
+                booster.Upgrade();
+                booster.GetComponent<TowerClickHandler>().RefreshRange();
+                ShowBooster(booster);
+            });
+
+        TMP_Text upgradeLabel = upgradeButton.GetComponentInChildren<TMP_Text>();
+        if (upgradeLabel != null)
+            upgradeLabel.text = canUpgrade ? $"Upgrade ${booster.GetCurrentLevelStats().upgradeCost}" : "Max Level";
+
+        int sellValue = Mathf.RoundToInt(data.cost * 0.5f);
+        TMP_Text sellLabel = sellButton.GetComponentInChildren<TMP_Text>();
+        if (sellLabel != null) sellLabel.text = $"Sell ${sellValue}";
+        sellButton.interactable = true;
+        sellButton.onClick.RemoveAllListeners();
+        BoosterTower capturedBooster = booster;
+        sellButton.onClick.AddListener(() => SellBooster(capturedBooster, sellValue));
     }
 
     public void Close()
     {
         currentTower = null;
+        currentBooster = null;
+        focusContainer.SetActive(true);
         panel.SetActive(false);
     }
 
     void RefreshPanel()
     {
         TowerData data = currentTower.GetData();
+        TowerLevel base_ = currentTower.GetCurrentStats();
+        TowerLevel boost = currentTower.GetActiveBoost();
 
         towerNameText.text = data.towerName;
-        damageText.text = $"Damage: {currentTower.GetCurrentStats().damage}";
-        attackSpeedText.text = $"Speed: {currentTower.GetCurrentStats().attackSpeed}";
-        rangeText.text = $"Range: {currentTower.GetCurrentStats().range}";
+
+        damageText.text = boost != null && boost.damageBonus > 0
+            ? $"Damage: {base_.damage:F0} (+{base_.damage * boost.damageBonus:F0})"
+            : $"Damage: {base_.damage:F0}";
+
+        attackSpeedText.text = boost != null && boost.attackSpeedBonus > 0
+            ? $"Speed: {base_.attackSpeed:F1} (+{base_.attackSpeed * boost.attackSpeedBonus:F1})"
+            : $"Speed: {base_.attackSpeed:F1}";
+
+        rangeText.text = boost != null && boost.rangeBonus > 0
+            ? $"Range: {base_.range:F1} (+{base_.range * boost.rangeBonus:F1})"
+            : $"Range: {base_.range:F1}";
+
         levelText.text = $"Level: {currentTower.GetCurrentLevel()} / {data.levels.Length}";
 
-        // Sell
         int sellValue = Mathf.RoundToInt(data.cost * 0.5f);
         TMP_Text sellLabel = sellButton.GetComponentInChildren<TMP_Text>();
         if (sellLabel != null) sellLabel.text = $"Sell ${sellValue}";
@@ -139,7 +205,28 @@ public class TowerInfoPanel : MonoBehaviour
                 break;
             }
         }
+
         currentTower.GetComponent<TowerClickHandler>().Deselect();
+        Close();
+    }
+
+    void SellBooster(BoosterTower booster, int sellValue)
+    {
+        booster.GetComponent<TowerClickHandler>().Deselect();
+        EconomyManager.Instance.Earn(sellValue);
+
+        GameObject boosterRoot = booster.gameObject;
+
+        GridCell[] cells = FindObjectsByType<GridCell>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (GridCell cell in cells)
+        {
+            if (cell.IsOccupiedBy(boosterRoot))
+            {
+                cell.FreeCellAndDestroy();
+                break;
+            }
+        }
+
         Close();
     }
 }

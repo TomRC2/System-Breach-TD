@@ -20,7 +20,11 @@ public class GridCell : MonoBehaviour
         if (isOccupied) return false;
 
         placedTower = Instantiate(towerPrefab, transform.position, Quaternion.identity);
-        placedTower.GetComponent<TowerController>().Initialize(data);
+
+        if (data.towerType == TowerType.Attack)
+            placedTower.GetComponent<TowerController>().Initialize(data);
+        else if (data.towerType == TowerType.Booster)
+            placedTower.GetComponent<BoosterTower>().Initialize(data);
 
         isOccupied = true;
         UpdateVisual();

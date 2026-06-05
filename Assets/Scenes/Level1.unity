@@ -10356,6 +10356,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a5b325be50dbaa9408daf64b6204be7b, type: 2}
   - {fileID: 11400000, guid: 8a23ace1f9ce4ee4a9b2eb32a8e7f098, type: 2}
   - {fileID: 11400000, guid: d1f65c1d2aa5e004d92523bf83b514ce, type: 2}
+  - {fileID: 11400000, guid: 7bbf5f36850a9f54b8ef4ef1bebfb934, type: 2}
   towerButtonPrefab: {fileID: 4430438676716992346, guid: 19cb26b3dbc768549854784ccaec5594, type: 3}
   buttonContainer: {fileID: 1353003731}
   allCells:
@@ -10511,6 +10512,7 @@ MonoBehaviour:
   focusModeText: {fileID: 1539477254}
   focusPrevButton: {fileID: 1417528132}
   focusNextButton: {fileID: 1078630118}
+  focusContainer: {fileID: 302221982}
   towerNameText: {fileID: 38270689}
   damageText: {fileID: 1490799349}
   attackSpeedText: {fileID: 2078536463}

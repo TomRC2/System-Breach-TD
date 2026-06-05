@@ -61,6 +61,9 @@ public class TowerSelectionPanel : MonoBehaviour
 
     public void TogglePanel()
     {
+        PlacementManager.Instance.DeselectTower();
+        TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
+        TowerInfoPanel.Instance.Close();
         bool isOpen = !panel.activeSelf;
         panel.SetActive(isOpen);
 

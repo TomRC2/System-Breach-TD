@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
 {
     private TowerController towerController;
+    private BoosterTower boosterTower;
     private Renderer[] renderers;
     private Color[] originalColors;
 
@@ -16,6 +17,7 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
     void Start()
     {
         towerController = GetComponentInParent<TowerController>();
+        boosterTower = GetComponentInParent<BoosterTower>();
         renderers = GetComponentsInParent<Renderer>();
         originalColors = new Color[renderers.Length];
         for (int i = 0; i < renderers.Length; i++)
@@ -56,10 +58,13 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
         foreach (Renderer rend in renderers)
             rend.material.color = highlightColor;
 
-        float range = towerController.GetCurrentStats().range;
+        float range = towerController != null
+            ? towerController.GetCurrentStats().range
+            : boosterTower.GetCurrentLevelStats().range;
 
         rangeSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        rangeSphere.transform.position = towerController.transform.position;
+        Transform owner = towerController != null ? towerController.transform : boosterTower.transform;
+        rangeSphere.transform.position = owner.position;
         rangeSphere.transform.localScale = Vector3.one * range * 2f;
         Destroy(rangeSphere.GetComponent<Collider>());
 
@@ -73,7 +78,10 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
         mat.color = new Color(0.4f, 0.8f, 1f, 0.15f);
         rangeSphere.GetComponent<Renderer>().material = mat;
 
-        TowerInfoPanel.Instance.Show(towerController);
+        if (towerController != null)
+            TowerInfoPanel.Instance.Show(towerController);
+        else if (boosterTower != null)
+            TowerInfoPanel.Instance.ShowBooster(boosterTower);
     }
 
     public void Deselect()
@@ -90,7 +98,9 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
     public void RefreshRange()
     {
         if (rangeSphere == null) return;
-        float range = towerController.GetCurrentStats().range;
+        float range = towerController != null
+            ? towerController.GetEffectiveStats().range
+            : boosterTower.GetCurrentLevelStats().range;
         rangeSphere.transform.localScale = Vector3.one * range * 2f;
     }
 }
