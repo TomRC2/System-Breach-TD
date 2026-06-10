@@ -5,6 +5,7 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
 {
     private TowerController towerController;
     private BoosterTower boosterTower;
+    private FarmTower farmTower;
     private Renderer[] renderers;
     private Color[] originalColors;
 
@@ -16,6 +17,7 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
+        farmTower = GetComponentInParent<FarmTower>();
         towerController = GetComponentInParent<TowerController>();
         boosterTower = GetComponentInParent<BoosterTower>();
         renderers = GetComponentsInParent<Renderer>();
@@ -58,12 +60,21 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
         foreach (Renderer rend in renderers)
             rend.material.color = highlightColor;
 
-        float range = towerController != null
-            ? towerController.GetCurrentStats().range
-            : boosterTower.GetCurrentLevelStats().range;
+        float range = 0f;
+        Transform owner = transform;
+
+        if (towerController != null)
+        {
+            range = towerController.GetCurrentStats().range;
+            owner = towerController.transform;
+        }
+        else if (boosterTower != null)
+        {
+            range = boosterTower.GetCurrentLevelStats().range;
+            owner = boosterTower.transform;
+        }
 
         rangeSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        Transform owner = towerController != null ? towerController.transform : boosterTower.transform;
         rangeSphere.transform.position = owner.position;
         rangeSphere.transform.localScale = Vector3.one * range * 2f;
         Destroy(rangeSphere.GetComponent<Collider>());
@@ -77,11 +88,14 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
         mat.renderQueue = 3000;
         mat.color = new Color(0.4f, 0.8f, 1f, 0.15f);
         rangeSphere.GetComponent<Renderer>().material = mat;
+        rangeSphere.SetActive(range > 0f);
 
         if (towerController != null)
             TowerInfoPanel.Instance.Show(towerController);
         else if (boosterTower != null)
             TowerInfoPanel.Instance.ShowBooster(boosterTower);
+        else if (farmTower != null)
+            TowerInfoPanel.Instance.ShowFarm(farmTower);
     }
 
     public void Deselect()

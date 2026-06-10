@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62a38953d6018449b31f52a9b2d6a47, type: 3}
+  m_Name: Tower_Farm
+  m_EditorClassIdentifier: Assembly-CSharp::TowerData
+  towerName: Farm
+  prefab: {fileID: 2045985719052300516, guid: ba7e8c0b0045b6a4291a2090221c12be, type: 3}
+  cost: 100
+  critMultiplier: 0
+  towerType: 2
+  levels:
+  - damage: 0
+    attackSpeed: 0
+    range: 0
+    critChance: 0
+    upgradeCost: 250
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 100
+  - damage: 0
+    attackSpeed: 0
+    range: 0
+    critChance: 0
+    upgradeCost: 500
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 250
+  - damage: 0
+    attackSpeed: 0
+    range: 0
+    critChance: 0
+    upgradeCost: 750
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 500
+  - damage: 0
+    attackSpeed: 0
+    range: 0
+    critChance: 0
+    upgradeCost: 1000
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 1000
+  - damage: 0
+    attackSpeed: 0
+    range: 0
+    critChance: 0
+    upgradeCost: 1500
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 1500

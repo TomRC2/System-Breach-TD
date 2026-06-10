@@ -25,6 +25,8 @@ public class GridCell : MonoBehaviour
             placedTower.GetComponent<TowerController>().Initialize(data);
         else if (data.towerType == TowerType.Booster)
             placedTower.GetComponent<BoosterTower>().Initialize(data);
+        else if (data.towerType == TowerType.Farm)
+            placedTower.GetComponent<FarmTower>().Initialize(data);
 
         isOccupied = true;
         UpdateVisual();

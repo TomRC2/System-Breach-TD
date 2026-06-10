@@ -107,6 +107,69 @@ public class TowerInfoPanel : MonoBehaviour
         BoosterTower capturedBooster = booster;
         sellButton.onClick.AddListener(() => SellBooster(capturedBooster, sellValue));
     }
+    public void ShowFarm(FarmTower farm)
+    {
+        currentTower = null;
+        currentBooster = null;
+        focusContainer.SetActive(false);
+        TowerSelectionPanel.Instance.panel.SetActive(false);
+        PlacementManager.Instance.DeselectTower();
+        TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
+        panel.SetActive(true);
+
+        TowerData data = farm.GetData();
+        TowerLevel level = farm.GetCurrentLevelStats();
+
+        towerNameText.text = data.towerName;
+        damageText.text = $"Money/Wave: ${level.moneyPerWave}";
+        attackSpeedText.text = "-";
+        rangeText.text = "-";
+        levelText.text = $"Level: {farm.GetCurrentLevel()} / {data.levels.Length}";
+
+        bool canUpgrade = farm.CanUpgrade();
+        bool canAfford = EconomyManager.Instance.CanAfford(farm.GetUpgradeCost());
+
+        upgradeButton.interactable = canUpgrade && canAfford;
+        upgradeButton.onClick.RemoveAllListeners();
+        FarmTower capturedFarm = farm;
+        if (canUpgrade && canAfford)
+            upgradeButton.onClick.AddListener(() =>
+            {
+                EconomyManager.Instance.Spend(capturedFarm.GetUpgradeCost());
+                capturedFarm.Upgrade();
+                ShowFarm(capturedFarm);
+            });
+
+        TMP_Text upgradeLabel = upgradeButton.GetComponentInChildren<TMP_Text>();
+        if (upgradeLabel != null)
+            upgradeLabel.text = canUpgrade ? $"Upgrade ${farm.GetUpgradeCost()}" : "Max Level";
+
+        int sellValue = Mathf.RoundToInt(data.cost * 0.5f);
+        TMP_Text sellLabel = sellButton.GetComponentInChildren<TMP_Text>();
+        if (sellLabel != null) sellLabel.text = $"Sell ${sellValue}";
+        sellButton.interactable = true;
+        sellButton.onClick.RemoveAllListeners();
+        sellButton.onClick.AddListener(() => SellFarm(capturedFarm, sellValue));
+    }
+
+    void SellFarm(FarmTower farm, int sellValue)
+    {
+        farm.GetComponent<TowerClickHandler>().Deselect();
+        EconomyManager.Instance.Earn(sellValue);
+
+        GameObject farmRoot = farm.gameObject;
+        GridCell[] cells = FindObjectsByType<GridCell>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (GridCell cell in cells)
+        {
+            if (cell.IsOccupiedBy(farmRoot))
+            {
+                cell.FreeCellAndDestroy();
+                break;
+            }
+        }
+
+        Close();
+    }
 
     public void Close()
     {
