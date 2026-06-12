@@ -8,4 +8,8 @@ public class EnemyData : ScriptableObject
     public float hp;
     public float speed;
     public float reward;
+
+    [Header("Boss")]
+    public bool isBoss = false;
+    public float hpScalingPerLevel = 200f;
 }

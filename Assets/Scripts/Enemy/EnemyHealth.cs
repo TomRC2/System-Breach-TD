@@ -5,7 +5,9 @@ public class EnemyHealth : MonoBehaviour
 {
     public float maxHP = 100f;
     public float reward = 10f;
+
     private float currentHP;
+    private bool initialized = false;
 
     public Action OnDeath;
     public Action OnReach;
@@ -13,7 +15,14 @@ public class EnemyHealth : MonoBehaviour
 
     void Start()
     {
+        if (!initialized)
+            Initialize();
+    }
+
+    public void Initialize()
+    {
         currentHP = maxHP;
+        initialized = true;
     }
 
     public void TakeDamage(float amount)

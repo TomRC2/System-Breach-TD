@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
@@ -9,9 +8,11 @@ public class WaveSpawner : MonoBehaviour
     public List<WaveData> waves;
     public Transform[] waypoints;
     public float timeBetweenWaves = 5f;
-    public event Action<int, int> OnWaveChanged;
-    public static WaveSpawner Instance;
 
+    public event Action<int, int> OnWaveChanged;
+    public event Action<EnemyHealth> OnBossSpawned;
+
+    public static WaveSpawner Instance;
 
     private int currentWave = 0;
     private int activeEnemies = 0;
@@ -21,24 +22,25 @@ public class WaveSpawner : MonoBehaviour
     [Header("UI")]
     public GameObject startButton;
 
+    void Awake()
+    {
+        Instance = this;
+    }
+
     public void BeginGame()
     {
         startButton.SetActive(false);
         StartCoroutine(StartWave());
     }
-    void Awake()
-    {
-        Instance = this;
-    }
+
     IEnumerator StartWave()
     {
         if (currentWave >= waves.Count) yield break;
+
         OnWaveChanged?.Invoke(currentWave + 1, waves.Count);
         spawning = true;
 
-        spawning = true;
         WaveData wave = waves[currentWave];
-
         foreach (EnemyGroup group in wave.groups)
         {
             for (int i = 0; i < group.count; i++)
@@ -69,8 +71,22 @@ public class WaveSpawner : MonoBehaviour
         movement.speed = data.speed;
 
         EnemyHealth health = obj.GetComponent<EnemyHealth>();
-        health.maxHP = data.hp;
         health.reward = data.reward;
+
+        if (data.isBoss)
+        {
+            int levelNumber = GameManager.Instance != null ? GameManager.Instance.levelNumber : 1;
+            health.maxHP = data.hp + data.hpScalingPerLevel * (levelNumber - 1);
+        }
+        else
+        {
+            health.maxHP = data.hp;
+        }
+
+        health.Initialize();
+
+        if (data.isBoss)
+            OnBossSpawned?.Invoke(health);
 
         activeEnemies++;
         health.OnDeath += OnEnemyDefeated;
@@ -98,18 +114,14 @@ public class WaveSpawner : MonoBehaviour
     {
         skipWait = false;
         WaveCountdownPanel.Instance.StartCountdown(timeBetweenWaves);
-
         float elapsed = 0f;
         while (elapsed < timeBetweenWaves && !skipWait)
         {
             elapsed += Time.deltaTime;
             yield return null;
         }
-
         WaveCountdownPanel.Instance.Hide();
         currentWave++;
         StartCoroutine(StartWave());
     }
-
-
 }
