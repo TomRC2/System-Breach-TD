@@ -7618,7 +7618,6 @@ RectTransform:
   - {fileID: 2101472627}
   - {fileID: 270797842}
   - {fileID: 878663858}
-  - {fileID: 1812442374}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -10439,6 +10438,7 @@ GameObject:
   - component: {fileID: 847550798}
   - component: {fileID: 847550796}
   - component: {fileID: 847550797}
+  - component: {fileID: 847550799}
   m_Layer: 0
   m_Name: HudManager
   m_TagString: Untagged
@@ -10687,6 +10687,22 @@ MonoBehaviour:
   panel: {fileID: 2101472626}
   countdownText: {fileID: 757088869}
   skipButton: {fileID: 1782741490}
+--- !u!114 &847550799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847550792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b85d425b1338d34e8bfbfe4e6707dd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossHealthBar
+  panel: {fileID: 1812442373}
+  hpSlider: {fileID: 2004537379}
+  hpText: {fileID: 1722025382}
+  bossNameText: {fileID: 1293609245}
 --- !u!1 &853029001
 GameObject:
   m_ObjectHideFlags: 0
@@ -16450,6 +16466,7 @@ RectTransform:
   - {fileID: 1229458326}
   - {fileID: 853029002}
   - {fileID: 1999318082}
+  - {fileID: 1812442374}
   m_Father: {fileID: 614275737}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -22365,7 +22382,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 3.3071136, y: 0, z: -22.954803, w: 31.450054}
+  m_margin: {x: 3.3071136, y: 0, z: -14.335541, w: 31.450054}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -23401,7 +23418,6 @@ GameObject:
   - component: {fileID: 1812442374}
   - component: {fileID: 1812442377}
   - component: {fileID: 1812442376}
-  - component: {fileID: 1812442375}
   m_Layer: 5
   m_Name: BossPanel
   m_TagString: Untagged
@@ -23416,7 +23432,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1812442373}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
@@ -23424,29 +23440,13 @@ RectTransform:
   - {fileID: 1722025381}
   - {fileID: 1293609244}
   - {fileID: 2004537378}
-  m_Father: {fileID: 614275737}
+  m_Father: {fileID: 1305006453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 457}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.0053710938, y: 457.0025}
+  m_SizeDelta: {x: 360.59998, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1812442375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1812442373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b85d425b1338d34e8bfbfe4e6707dd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BossHealthBar
-  panel: {fileID: 1812442373}
-  hpSlider: {fileID: 2004537379}
-  hpText: {fileID: 1722025382}
-  bossNameText: {fileID: 1293609245}
 --- !u!114 &1812442376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23454,7 +23454,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1812442373}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 

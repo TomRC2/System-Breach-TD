@@ -32,8 +32,6 @@ public class BossHealthBar : MonoBehaviour
     {
         trackedBoss = boss;
 
-        if (bossNameText != null)
-            bossNameText.text = boss.gameObject.name.Replace("(Clone)", "").Trim();
 
         UpdateBar(boss.maxHP, boss.maxHP);
         panel.SetActive(true);
@@ -53,7 +51,7 @@ public class BossHealthBar : MonoBehaviour
         if (hpSlider != null)
             hpSlider.value = current / max;
         if (hpText != null)
-            hpText.text = $"{Mathf.CeilToInt(current)} / {Mathf.CeilToInt(max)}";
+            hpText.text = $"{Mathf.CeilToInt(current)}/{Mathf.CeilToInt(max)}";
     }
 
     void HideBar()
