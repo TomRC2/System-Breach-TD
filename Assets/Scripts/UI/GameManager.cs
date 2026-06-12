@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class GameManager : MonoBehaviour
 
     [Header("HUD")]
     public GameObject hud;
+
+    [Header("Score UI")]
+    public TMP_Text victoryScoreText;
+    public TMP_Text victoryHighscoreText;
+    public TMP_Text gameOverScoreText;
 
     private bool gameEnded = false;
 
@@ -30,22 +36,42 @@ public class GameManager : MonoBehaviour
 
     public void Victory()
     {
-        hud.SetActive(false);
         if (gameEnded) return;
         gameEnded = true;
 
-        LevelSelectManager.UnlockNextLevel(levelNumber);
+        hud.SetActive(false);
         Time.timeScale = 0f;
+
+        LevelSelectManager.UnlockNextLevel(levelNumber);
+
+        if (ScoreManager.Instance != null)
+        {
+            int score = ScoreManager.Instance.GetScore();
+            int highscore = ScoreManager.Instance.SaveAndGetHighscore(levelNumber);
+
+            if (victoryScoreText != null)
+                victoryScoreText.text = $"Puntaje: {score}";
+
+            if (victoryHighscoreText != null)
+                victoryHighscoreText.text = score >= highscore
+                    ? "¡Nuevo récord!"
+                    : $"Récord: {highscore}";
+        }
+
         victoryPanel.SetActive(true);
     }
 
     public void GameOver()
     {
-        hud.SetActive(false);
         if (gameEnded) return;
         gameEnded = true;
 
+        hud.SetActive(false);
         Time.timeScale = 0f;
+
+        if (ScoreManager.Instance != null && gameOverScoreText != null)
+            gameOverScoreText.text = $"Puntaje: {ScoreManager.Instance.GetScore()}";
+
         gameOverPanel.SetActive(true);
     }
 

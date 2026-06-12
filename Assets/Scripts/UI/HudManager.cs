@@ -14,6 +14,9 @@ public class HUDManager : MonoBehaviour
     [Header("Money")]
     public TMP_Text moneyText;
 
+    [Header("Score")]
+    public TMP_Text scoreText;
+
     void Start()
     {
         ComputerHealth computer = FindFirstObjectByType<ComputerHealth>();
@@ -35,6 +38,12 @@ public class HUDManager : MonoBehaviour
             EconomyManager.Instance.OnMoneyChanged += UpdateMoney;
             UpdateMoney(EconomyManager.Instance.GetMoney());
         }
+
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.OnScoreChanged += UpdateScore;
+            UpdateScore(0);
+        }
     }
 
     void UpdateHP(float current, float max)
@@ -55,5 +64,11 @@ public class HUDManager : MonoBehaviour
     {
         if (moneyText != null)
             moneyText.text = $"RAM: ${amount}";
+    }
+
+    void UpdateScore(int score)
+    {
+        if (scoreText != null)
+            scoreText.text = $"Score: {score}";
     }
 }

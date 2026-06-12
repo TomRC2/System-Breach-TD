@@ -31,9 +31,20 @@ public class PauseManager : MonoBehaviour
         sfxSlider.value = PlayerPrefs.GetFloat("vol_sfx", 1f);
         autoSkipToggle.isOn = PlayerPrefs.GetInt("auto_skip", 0) == 1;
 
-        musicSlider.onValueChanged.AddListener(v => PlayerPrefs.SetFloat("vol_music", v));
-        sfxSlider.onValueChanged.AddListener(v => PlayerPrefs.SetFloat("vol_sfx", v));
-        autoSkipToggle.onValueChanged.AddListener(v => PlayerPrefs.SetInt("auto_skip", v ? 1 : 0));
+        musicSlider.onValueChanged.AddListener(v =>
+        {
+            PlayerPrefs.SetFloat("vol_music", v);
+            if (AudioManager.Instance != null) AudioManager.Instance.SetMusicVolume(v);
+        });
+
+        sfxSlider.onValueChanged.AddListener(v =>
+        {
+            PlayerPrefs.SetFloat("vol_sfx", v);
+            if (AudioManager.Instance != null) AudioManager.Instance.SetSFXVolume(v);
+        });
+
+        autoSkipToggle.onValueChanged.AddListener(v =>
+            PlayerPrefs.SetInt("auto_skip", v ? 1 : 0));
 
         pausePanel.SetActive(false);
     }
@@ -46,16 +57,16 @@ public class PauseManager : MonoBehaviour
 
     public void TogglePause()
     {
-        hud.SetActive(false);
         isPaused = !isPaused;
+        hud.SetActive(!isPaused);
         pausePanel.SetActive(isPaused);
         Time.timeScale = isPaused ? 0f : 1f;
     }
 
     public void Resume()
     {
-        hud.SetActive(true);
         isPaused = false;
+        hud.SetActive(true);
         pausePanel.SetActive(false);
         Time.timeScale = 1f;
     }

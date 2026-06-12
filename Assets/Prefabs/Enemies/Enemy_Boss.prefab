@@ -185,6 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHP: 100
   reward: 250
+  isBoss: 1
 --- !u!114 &5315261341721715549
 MonoBehaviour:
   m_ObjectHideFlags: 0
