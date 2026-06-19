@@ -44,6 +44,7 @@ public class PlacementManager : MonoBehaviour
                         EconomyManager.Instance.Spend(selectedTower.cost);
                         DeselectTower();
                         TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
+                        TowerSelectionPanel.Instance.panel.SetActive(true);
                     }
                 }
             }

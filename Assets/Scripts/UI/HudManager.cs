@@ -57,7 +57,7 @@ public class HUDManager : MonoBehaviour
     void UpdateWave(int current, int total)
     {
         if (waveText != null)
-            waveText.text = $"Wave {current} / {total}";
+            waveText.text = $"Wave {current}/{total}";
     }
 
     void UpdateMoney(int amount)
