@@ -19,6 +19,7 @@ public class PauseManager : MonoBehaviour
     public Toggle autoSkipToggle;
 
     private bool isPaused = false;
+    private float timeScaleBeforePause = 1f;
 
     void Awake()
     {
@@ -60,7 +61,15 @@ public class PauseManager : MonoBehaviour
         isPaused = !isPaused;
         hud.SetActive(!isPaused);
         pausePanel.SetActive(isPaused);
-        Time.timeScale = isPaused ? 0f : 1f;
+        if (isPaused)
+        {
+            timeScaleBeforePause = Time.timeScale;
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = timeScaleBeforePause;
+        }
     }
 
     public void Resume()
@@ -68,7 +77,7 @@ public class PauseManager : MonoBehaviour
         isPaused = false;
         hud.SetActive(true);
         pausePanel.SetActive(false);
-        Time.timeScale = 1f;
+        Time.timeScale = timeScaleBeforePause;
     }
 
     public void GoToMainMenu()

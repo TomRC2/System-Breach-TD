@@ -7,7 +7,7 @@ public enum FocusMode { Closest, Farthest, MostHP, LeastHP, Fastest, First }
 public class TowerController : MonoBehaviour
 {
     private TowerData data;
-    private int currentLevel = 0; // índice del array, nivel 1 = índice 0
+    private int currentLevel = 0; // ï¿½ndice del array, nivel 1 = ï¿½ndice 0
 
     public FocusMode focusMode = FocusMode.First;
     public GameObject projectilePrefab;
@@ -93,6 +93,9 @@ public class TowerController : MonoBehaviour
 
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         proj.GetComponent<Projectile>().Initialize(target, CalculateDamage());
+
+        if (data.attackSFX != null)
+            AudioManager.Instance?.PlaySFX(data.attackSFX);
     }
 
     float CalculateDamage()

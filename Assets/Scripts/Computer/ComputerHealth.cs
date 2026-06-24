@@ -13,8 +13,7 @@ public class ComputerHealth : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        currentHP -= amount;
-        Debug.Log($"PC HP: {currentHP}");
+        currentHP = Mathf.Max(currentHP - amount, 0f);
         if (currentHP <= 0) GameOver();
         OnHPChanged?.Invoke(currentHP, maxHP);
     }

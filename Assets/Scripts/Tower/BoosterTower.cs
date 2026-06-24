@@ -11,11 +11,8 @@ public class BoosterTower : MonoBehaviour
     {
         data = towerData;
         currentLevel = 0;
-        ApplyBoost();
-    }
-    void Update()
-    {
-        RefreshBoost();
+        // Refrescar cada 0.5s en vez de cada frame (Physics.OverlapSphere es costoso)
+        InvokeRepeating(nameof(RefreshBoost), 0f, 0.5f);
     }
     public void Upgrade()
     {

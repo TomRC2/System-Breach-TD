@@ -28,6 +28,7 @@ public class TowerData : ScriptableObject
     public int cost;
     public float critMultiplier = 2f;
     public TowerType towerType = TowerType.Attack;
+    public AudioClip attackSFX;
 
     public TowerLevel[] levels;
 }

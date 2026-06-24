@@ -12,6 +12,11 @@ public class AudioManager : MonoBehaviour
     public AudioClip menuMusic;
     public AudioClip gameplayMusic;
 
+    [Header("SFX")]
+    public AudioClip bossSpawnSFX;
+    public AudioClip placeTowerSFX;
+    public AudioClip spendMoneySFX;
+
     private const string KEY_MUSIC = "vol_music";
     private const string KEY_SFX = "vol_sfx";
 

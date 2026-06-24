@@ -6,6 +6,7 @@ public class EnemyHealth : MonoBehaviour
     public float maxHP = 100f;
     public float reward = 10f;
     public bool isBoss = false;
+    public string displayName = "";
 
     private float currentHP;
     private bool initialized = false;

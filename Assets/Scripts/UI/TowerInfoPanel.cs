@@ -154,7 +154,6 @@ public class TowerInfoPanel : MonoBehaviour
 
     void SellFarm(FarmTower farm, int sellValue)
     {
-        farm.GetComponent<TowerClickHandler>().Deselect();
         EconomyManager.Instance.Earn(sellValue);
 
         GameObject farmRoot = farm.gameObject;
@@ -168,7 +167,8 @@ public class TowerInfoPanel : MonoBehaviour
             }
         }
 
-        Close();
+        // Deselect ya llama Close() internamente
+        farm.GetComponent<TowerClickHandler>().Deselect();
     }
 
     public void Close()
@@ -269,13 +269,12 @@ public class TowerInfoPanel : MonoBehaviour
             }
         }
 
+        // Deselect ya llama Close() internamente
         currentTower.GetComponent<TowerClickHandler>().Deselect();
-        Close();
     }
 
     void SellBooster(BoosterTower booster, int sellValue)
     {
-        booster.GetComponent<TowerClickHandler>().Deselect();
         EconomyManager.Instance.Earn(sellValue);
 
         GameObject boosterRoot = booster.gameObject;
@@ -290,6 +289,7 @@ public class TowerInfoPanel : MonoBehaviour
             }
         }
 
-        Close();
+        // Deselect ya llama Close() internamente
+        booster.GetComponent<TowerClickHandler>().Deselect();
     }
 }

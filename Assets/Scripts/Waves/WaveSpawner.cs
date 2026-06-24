@@ -72,6 +72,8 @@ public class WaveSpawner : MonoBehaviour
 
         EnemyHealth health = obj.GetComponent<EnemyHealth>();
         health.reward = data.reward;
+        health.isBoss = data.isBoss;
+        health.displayName = data.enemyName;
 
         if (data.isBoss)
         {
@@ -86,7 +88,10 @@ public class WaveSpawner : MonoBehaviour
         health.Initialize();
 
         if (data.isBoss)
+        {
             OnBossSpawned?.Invoke(health);
+            AudioManager.Instance?.PlaySFX(AudioManager.Instance.bossSpawnSFX);
+        }
 
         activeEnemies++;
         health.OnDeath += OnEnemyDefeated;

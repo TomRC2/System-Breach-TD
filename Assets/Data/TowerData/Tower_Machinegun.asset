@@ -16,6 +16,7 @@ MonoBehaviour:
   prefab: {fileID: 7346411035423853115, guid: 57a14e3cdcf1a0745b1417f01258da0b, type: 3}
   cost: 75
   critMultiplier: 2
+  attackSFX: {fileID: 8300000, guid: 511f7e19a645469896a4f941130542de, type: 3}
   levels:
   - damage: 3
     attackSpeed: 15

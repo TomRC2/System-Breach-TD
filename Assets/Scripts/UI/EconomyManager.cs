@@ -36,6 +36,7 @@ public class EconomyManager : MonoBehaviour
         if (!CanAfford(amount)) return false;
         currentMoney -= amount;
         OnMoneyChanged?.Invoke(currentMoney);
+        AudioManager.Instance?.PlaySFX(AudioManager.Instance.spendMoneySFX);
         return true;
     }
 

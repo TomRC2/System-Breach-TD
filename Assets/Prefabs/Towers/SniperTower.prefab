@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerClickHandler
   highlightColor: {r: 0.4, g: 0.8, b: 1, a: 1}
+  rangeMaterial: {fileID: 2100000, guid: 3757f23c9191460d8d193a2510bb9392, type: 2}
 --- !u!1 &2782320281409963023
 GameObject:
   m_ObjectHideFlags: 0

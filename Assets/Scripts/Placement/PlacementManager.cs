@@ -41,6 +41,7 @@ public class PlacementManager : MonoBehaviour
                     bool placed = cell.PlaceTower(selectedTower.prefab, selectedTower);
                     if (placed)
                     {
+                        AudioManager.Instance?.PlaySFX(AudioManager.Instance.placeTowerSFX);
                         EconomyManager.Instance.Spend(selectedTower.cost);
                         DeselectTower();
                         TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
