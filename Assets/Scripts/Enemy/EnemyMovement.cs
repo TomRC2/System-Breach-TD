@@ -32,5 +32,13 @@ public class EnemyMovement : MonoBehaviour
         {
             currentWaypoint++;
         }
+
+        Vector3 dir = target.position - transform.position;
+        if (Mathf.Abs(dir.x) > 0.01f)
+        {
+            Vector3 scale = transform.localScale;
+            scale.x = dir.x < 0 ? -Mathf.Abs(scale.x) : Mathf.Abs(scale.x);
+            transform.localScale = scale;
+        }
     }
 }
