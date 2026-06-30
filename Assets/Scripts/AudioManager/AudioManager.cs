@@ -17,6 +17,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip placeTowerSFX;
     public AudioClip spendMoneySFX;
 
+    [Header("UI")]
+    public AudioClip buttonSound;
+
     private const string KEY_MUSIC = "vol_music";
     private const string KEY_SFX = "vol_sfx";
 
@@ -51,6 +54,10 @@ public class AudioManager : MonoBehaviour
         musicSource.volume = volume;
         PlayerPrefs.SetFloat(KEY_MUSIC, volume);
  
+    }
+    public void PlayButtonSound()
+    {
+        sfxSource.PlayOneShot(buttonSound);
     }
     public void SetSFXVolume(float value)
     {

@@ -1290,7 +1290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0cf39fdfb133246418d66bfb7c0951c6, type: 2}
+  - {fileID: 2100000, guid: 0a3df23776e16fa4ebc53c82040edf38, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1332,6 +1332,7 @@ GameObject:
   m_Component:
   - component: {fileID: 275848447}
   - component: {fileID: 275848448}
+  - component: {fileID: 275848449}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -1375,6 +1376,19 @@ MonoBehaviour:
   bossSpawnSFX: {fileID: 8300000, guid: 6abcc911f0b34a57908665c4acc58ec4, type: 3}
   placeTowerSFX: {fileID: 8300000, guid: b58cf73776234f48b20dcf35ecb40c2d, type: 3}
   spendMoneySFX: {fileID: 8300000, guid: bef7502633994048ac435f5b801e726c, type: 3}
+  buttonSound: {fileID: 8300000, guid: 0d31d0c0b531b8b45b2a9ddf5466eba0, type: 3}
+--- !u!114 &275848449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275848445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10f1ff2367fdd34f9d72865e96666b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalButtonSound
 --- !u!1 &293763846
 GameObject:
   m_ObjectHideFlags: 0
