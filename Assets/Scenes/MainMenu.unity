@@ -1371,8 +1371,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   musicSource: {fileID: 1666320490}
   sfxSource: {fileID: 1101608269}
-  menuMusic: {fileID: 8300000, guid: f1e8abc0ea459f143b90a08405613d0c, type: 3}
-  gameplayMusic: {fileID: 8300000, guid: fc69a9f82028d9947b5571b292c5b93a, type: 3}
+  menuMusic: {fileID: 8300000, guid: daf3fa2ff1e74f14296e46bdf3a714d7, type: 3}
+  gameplayMusic: {fileID: 8300000, guid: 193d28f18252285438a026c756801a43, type: 3}
   bossSpawnSFX: {fileID: 8300000, guid: 6abcc911f0b34a57908665c4acc58ec4, type: 3}
   placeTowerSFX: {fileID: 8300000, guid: b58cf73776234f48b20dcf35ecb40c2d, type: 3}
   spendMoneySFX: {fileID: 8300000, guid: bef7502633994048ac435f5b801e726c, type: 3}
