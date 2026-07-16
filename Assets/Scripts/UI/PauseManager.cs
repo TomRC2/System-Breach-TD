@@ -49,7 +49,14 @@ public class PauseManager : MonoBehaviour
 
         pausePanel.SetActive(false);
     }
-
+    public void OpenTutorial()
+    {
+        Resume();
+        PlayerPrefs.SetInt("tutorial_done", 0);
+        PlayerPrefs.Save();
+        GameManager.Instance.tutorialPanel.SetActive(true);
+        Time.timeScale = 0f;
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))

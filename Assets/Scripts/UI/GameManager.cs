@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
     [Header("Panels")]
     public GameObject victoryPanel;
     public GameObject gameOverPanel;
-
+    [Header("Tutorial")]
+    public GameObject tutorialPanel;
     [Header("HUD")]
     public GameObject hud;
 
@@ -32,6 +33,9 @@ public class GameManager : MonoBehaviour
     {
         victoryPanel.SetActive(false);
         gameOverPanel.SetActive(false);
+
+        if (tutorialPanel != null)
+            tutorialPanel.SetActive(!TutorialManager.IsTutorialDone());
     }
 
     public void Victory()
