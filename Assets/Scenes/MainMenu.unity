@@ -5398,6 +5398,8 @@ MonoBehaviour:
   - {fileID: 1347297734}
   - {fileID: 1699323617}
   - {fileID: 548195396}
+  lockSprite: {fileID: -742920699, guid: 02bd4672b84091d419baaf4bdc039444, type: 3}
+  lockIconPrefab: {fileID: 1887653726549052239, guid: 1e0cdb346c5108c42b7459c34a6e3266, type: 3}
 --- !u!4 &1736907802
 Transform:
   m_ObjectHideFlags: 0
