@@ -31,4 +31,12 @@ public class TowerData : ScriptableObject
     public AudioClip attackSFX;
 
     public TowerLevel[] levels;
+
+    public int GetEffectiveCost()
+    {
+        if (towerType != TowerType.Farm) return cost;
+        int effective = Mathf.RoundToInt(cost * Mathf.Pow(1.5f, FarmTower.farmCount));
+        Debug.Log($"{towerName} effective cost: {effective}, farmCount: {FarmTower.farmCount}");
+        return effective;
+    }
 }

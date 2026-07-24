@@ -43,7 +43,7 @@ public class WaveCountdownPanel : MonoBehaviour
         while (remaining > 0f)
         {
             countdownText.text = $"Next wave in {Mathf.CeilToInt(remaining)}s";
-            remaining -= Time.deltaTime;
+            remaining -= Time.unscaledDeltaTime;
             yield return null;
         }
 

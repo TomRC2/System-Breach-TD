@@ -122,7 +122,7 @@ public class WaveSpawner : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < timeBetweenWaves && !skipWait)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
         WaveCountdownPanel.Instance.Hide();

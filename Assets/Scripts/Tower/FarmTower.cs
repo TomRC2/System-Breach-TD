@@ -4,7 +4,7 @@ public class FarmTower : MonoBehaviour
 {
     private TowerData data;
     private int currentLevel = 0;
-
+    public static int farmCount = 0;
     public void Initialize(TowerData towerData)
     {
         data = towerData;
@@ -29,9 +29,10 @@ public class FarmTower : MonoBehaviour
     public int GetCurrentLevel() => currentLevel + 1;
     public bool CanUpgrade() => currentLevel < data.levels.Length - 1;
     public int GetUpgradeCost() => data.levels[currentLevel].upgradeCost;
-
+    void OnEnable() { farmCount++; }
     void OnDestroy()
     {
+        farmCount--;
         if (WaveSpawner.Instance != null)
             WaveSpawner.Instance.OnWaveChanged -= OnWaveStarted;
     }

@@ -32,7 +32,7 @@ public class PlacementManager : MonoBehaviour
                 GridCell cell = hit.collider.GetComponent<GridCell>();
                 if (cell != null)
                 {
-                    if (!EconomyManager.Instance.CanAfford(selectedTower.cost))
+                    if (!EconomyManager.Instance.CanAfford(selectedTower.GetEffectiveCost()))
                     {
                         Debug.Log("Dinero insuficiente");
                         return;
@@ -42,7 +42,8 @@ public class PlacementManager : MonoBehaviour
                     if (placed)
                     {
                         AudioManager.Instance?.PlaySFX(AudioManager.Instance.placeTowerSFX);
-                        EconomyManager.Instance.Spend(selectedTower.cost);
+                        EconomyManager.Instance.Spend(selectedTower.GetEffectiveCost());
+                        TowerSelectionPanel.Instance.RefreshAllLabels();
                         DeselectTower();
                         TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
                         TowerSelectionPanel.Instance.panel.SetActive(true);

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -19,7 +20,8 @@ public class AudioManager : MonoBehaviour
 
     [Header("UI")]
     public AudioClip buttonSound;
-
+    private Dictionary<AudioClip, float> lastPlayedTime = new Dictionary<AudioClip, float>();
+    public float minTimeBetweenSameSFX = 0.1f;
     private const string KEY_MUSIC = "vol_music";
     private const string KEY_SFX = "vol_sfx";
 
@@ -84,6 +86,17 @@ public class AudioManager : MonoBehaviour
 
         musicSource.clip = gameplayMusic;
         musicSource.Play();
+    }
+    public void PlaySFXLimited(AudioClip clip)
+    {
+        if (clip == null) return;
+
+        if (lastPlayedTime.ContainsKey(clip) &&
+            Time.time - lastPlayedTime[clip] < minTimeBetweenSameSFX)
+            return;
+
+        lastPlayedTime[clip] = Time.time;
+        sfxSource.PlayOneShot(clip);
     }
 }
 

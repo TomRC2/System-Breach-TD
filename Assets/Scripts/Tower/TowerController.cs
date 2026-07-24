@@ -95,7 +95,7 @@ public class TowerController : MonoBehaviour
         proj.GetComponent<Projectile>().Initialize(target, CalculateDamage());
 
         if (data.attackSFX != null)
-            AudioManager.Instance?.PlaySFX(data.attackSFX);
+            AudioManager.Instance?.PlaySFXLimited(data.attackSFX);
     }
 
     float CalculateDamage()

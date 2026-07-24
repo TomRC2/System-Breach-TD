@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class TowerSelectionPanel : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class TowerSelectionPanel : MonoBehaviour
     [Header("Grid")]
     public GridCell[] allCells;
 
+    private Dictionary<TowerData, (TMP_Text label, Button button)> buttonLabels =
+        new Dictionary<TowerData, (TMP_Text, Button)>();
+
     void Awake()
     {
         Instance = this;
@@ -31,7 +35,7 @@ public class TowerSelectionPanel : MonoBehaviour
         HideGrid();
 
         if (EconomyManager.Instance != null)
-            EconomyManager.Instance.OnMoneyChanged += _ => RefreshButtons();
+            EconomyManager.Instance.OnMoneyChanged += _ => RefreshAllLabels();
     }
 
     void GenerateButtons()
@@ -41,22 +45,31 @@ public class TowerSelectionPanel : MonoBehaviour
             GameObject btn = Instantiate(towerButtonPrefab, buttonContainer);
 
             TMP_Text label = btn.GetComponentInChildren<TMP_Text>();
-            if (label != null) label.text = $"{data.towerName}\n${data.cost}";
+            Button button = btn.GetComponent<Button>();
+
+            if (label != null && button != null)
+            {
+                buttonLabels[data] = (label, button);
+                RefreshButtonLabel(data);
+            }
 
             TowerData captured = data;
-            Button button = btn.GetComponent<Button>();
             button.onClick.AddListener(() => SelectTower(captured));
         }
     }
 
-    void RefreshButtons()
+    public void RefreshButtonLabel(TowerData data)
     {
-        Button[] buttons = buttonContainer.GetComponentsInChildren<Button>();
-        for (int i = 0; i < buttons.Length && i < availableTowers.Length; i++)
-        {
-            buttons[i].interactable =
-                EconomyManager.Instance.CanAfford(availableTowers[i].cost);
-        }
+        if (!buttonLabels.ContainsKey(data)) return;
+        int cost = data.GetEffectiveCost();
+        buttonLabels[data].label.text = $"{data.towerName}\n${cost}";
+        buttonLabels[data].button.interactable = EconomyManager.Instance.CanAfford(cost);
+    }
+
+    public void RefreshAllLabels()
+    {
+        foreach (TowerData data in buttonLabels.Keys)
+            RefreshButtonLabel(data);
     }
 
     public void TogglePanel()
@@ -76,6 +89,7 @@ public class TowerSelectionPanel : MonoBehaviour
 
     void SelectTower(TowerData data)
     {
+        if (!EconomyManager.Instance.CanAfford(data.GetEffectiveCost())) return;
         PlacementManager.Instance.SelectTower(data);
         panel.SetActive(false);
         ShowGrid();
