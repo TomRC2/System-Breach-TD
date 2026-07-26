@@ -7,13 +7,14 @@ public enum FocusMode { Closest, Farthest, MostHP, LeastHP, Fastest, First }
 public class TowerController : MonoBehaviour
 {
     private TowerData data;
-    private int currentLevel = 0; // �ndice del array, nivel 1 = �ndice 0
-
+    private int currentLevel = 0;
     public FocusMode focusMode = FocusMode.First;
     public GameObject projectilePrefab;
     public Transform firePoint;
     public TowerLevel GetCurrentStats() => CurrentStats();
     private TowerLevel activeBoost = null;
+    [Header("References")]
+    public Transform rotatingPart;
 
     private float attackCooldown = 0f;
 
@@ -89,7 +90,10 @@ public class TowerController : MonoBehaviour
     void Shoot(GameObject target)
     {
         Vector3 dir = (target.transform.position - transform.position).normalized;
-        transform.rotation = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
+        if (rotatingPart != null)
+            rotatingPart.rotation = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
+        else
+            transform.rotation = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
 
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         proj.GetComponent<Projectile>().Initialize(target, CalculateDamage());

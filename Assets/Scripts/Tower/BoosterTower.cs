@@ -6,7 +6,9 @@ public class BoosterTower : MonoBehaviour
     public TowerData data;
     public int currentLevel = 0;
     public List<TowerController> boostedTowers = new List<TowerController>();
-
+    [Header("Rotation")]
+    public Transform rotatingPart;
+    public float rotationSpeed = 90f;
     public void Initialize(TowerData towerData)
     {
         data = towerData;
@@ -20,7 +22,11 @@ public class BoosterTower : MonoBehaviour
         currentLevel++;
         RefreshBoost();
     }
-
+    void Update()
+    {
+        if (rotatingPart != null)
+            rotatingPart.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
+    }
     void ApplyBoost()
     {
         RemoveAllBoosts();
