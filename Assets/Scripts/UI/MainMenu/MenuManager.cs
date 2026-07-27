@@ -9,7 +9,7 @@ public class MenuManager : MonoBehaviour
     public GameObject panelLevelSelect;
     public GameObject panelOptions;
     public GameObject panelCredits;
-
+    public GameObject panelInfo;
     void Awake()
     {
         Instance = this;
@@ -22,9 +22,12 @@ public class MenuManager : MonoBehaviour
         cam.OnArriveHome += () => OpenPanel(panelMainMenu);
         cam.OnArriveLevelSelect += () => OpenPanel(panelLevelSelect);
         cam.OnArriveOptions += () => OpenPanel(panelOptions);
-        cam.OnArriveCredits += () => OpenPanel(panelCredits);
+        cam.OnArriveInfo += () => OpenPanel(panelInfo);
     }
-
+    public void ToggleCredits()
+    {
+        panelCredits.SetActive(!panelCredits.activeSelf);
+    }
     public void GoHome()
     {
         CloseAllPanels();
@@ -43,6 +46,7 @@ public class MenuManager : MonoBehaviour
         panelLevelSelect.SetActive(false);
         panelOptions.SetActive(false);
         panelCredits.SetActive(false);
+        panelInfo.SetActive(false);
     }
 
     public void QuitGame()

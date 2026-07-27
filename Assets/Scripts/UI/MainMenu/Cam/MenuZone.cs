@@ -32,7 +32,7 @@ public class MenuZone : MonoBehaviour
                 CameraMenuController.Instance.GoToOptions();
                 break;
             case Destination.Credits:
-                CameraMenuController.Instance.GoToCredits();
+                CameraMenuController.Instance.GoToInfo();
                 break;
         }
     }

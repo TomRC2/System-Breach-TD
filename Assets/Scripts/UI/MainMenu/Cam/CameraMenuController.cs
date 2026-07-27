@@ -14,12 +14,12 @@ public class CameraMenuController : MonoBehaviour
     public Transform posHome;
     public Transform posLevelSelect;
     public Transform posOptions;
-    public Transform posCredits;
+    public Transform posInfo;
 
     public event Action OnArriveHome;
     public event Action OnArriveLevelSelect;
     public event Action OnArriveOptions;
-    public event Action OnArriveCredits;
+    public event Action OnArriveInfo;
 
     private Coroutine moveCoroutine;
     public bool IsMoving { get; private set; }
@@ -46,10 +46,10 @@ public class CameraMenuController : MonoBehaviour
         Move(posOptions, OnArriveOptions);
     }
 
-    public void GoToCredits()
+    public void GoToInfo()
     {
         if (IsMoving) return;
-        Move(posCredits, OnArriveCredits);
+        Move(posInfo, OnArriveInfo);
     }
 
     public void GoHome(bool instant = false)
