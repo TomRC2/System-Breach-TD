@@ -91,7 +91,8 @@ public class TowerController : MonoBehaviour
     {
         Vector3 dir = (target.transform.position - transform.position).normalized;
         if (rotatingPart != null)
-            rotatingPart.rotation = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
+            rotatingPart.rotation = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z))
+                  * Quaternion.Inverse(rotatingPart.parent.rotation);
         else
             transform.rotation = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
 
