@@ -5,6 +5,16 @@ public class FarmTower : MonoBehaviour
     private TowerData data;
     private int currentLevel = 0;
     public static int farmCount = 0;
+    [Header("Rotation")]
+    public Transform rotatingPart;
+    public float rotationSpeed = 90f;
+
+
+    void Update()
+    {
+        if (rotatingPart != null)
+            rotatingPart.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+    }
     public void Initialize(TowerData towerData)
     {
         data = towerData;
