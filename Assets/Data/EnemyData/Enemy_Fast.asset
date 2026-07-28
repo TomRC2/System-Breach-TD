@@ -17,3 +17,8 @@ MonoBehaviour:
   hp: 45
   speed: 6
   reward: 10
+  description: A lightweight virus optimized for speed. Low HP but moves faster than
+    most towers can track. Best countered with high fire rate towers like the Machinegun.
+  sprite: {fileID: 1432252275, guid: 0ddcbf8724b8264409283f977a7a8bea, type: 3}
+  isBoss: 0
+  hpScalingPerLevel: 200

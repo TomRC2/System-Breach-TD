@@ -16,30 +16,54 @@ MonoBehaviour:
   prefab: {fileID: 925704779604272732, guid: 80886b63b054de149adc53ae49371287, type: 3}
   cost: 50
   critMultiplier: 2
+  towerType: 0
   attackSFX: {fileID: 8300000, guid: 35558faebe5a469bab91806ae47a8585, type: 3}
+  description: The standard defensive unit. Balanced stats make it reliable in any
+    situation. A solid choice for your first line of defense and the backbone of
+    most strategies.
   levels:
   - damage: 5
     attackSpeed: 3
     range: 4
     critChance: 0
     upgradeCost: 200
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 10
     attackSpeed: 5
     range: 5
     critChance: 0.05
     upgradeCost: 300
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 15
     attackSpeed: 8
     range: 6
     critChance: 0.1
     upgradeCost: 500
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 25
     attackSpeed: 12
     range: 7
     critChance: 0.2
     upgradeCost: 1000
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 35
     attackSpeed: 15
     range: 10
     critChance: 0.3
     upgradeCost: 0
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0

@@ -17,3 +17,9 @@ MonoBehaviour:
   hp: 75
   speed: 3
   reward: 15
+  description: "A standard malware strain. Balanced speed and durability make it
+    a reliable threat in any wave. Don't underestimate it \u2014 in large groups,
+    it can overwhelm even well-placed defenses."
+  sprite: {fileID: 848219091, guid: c59eef2facab1604282a232d1e8aa6da, type: 3}
+  isBoss: 0
+  hpScalingPerLevel: 200

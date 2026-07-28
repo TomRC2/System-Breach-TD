@@ -17,6 +17,10 @@ MonoBehaviour:
   cost: 100
   critMultiplier: 0
   towerType: 2
+  attackSFX: {fileID: 0}
+  description: "Generates passive RAM at the start of each wave. The more you upgrade
+    it, the more resources you have to spend. Be careful though \u2014 each additional
+    Farm costs significantly more than the last."
   levels:
   - damage: 0
     attackSpeed: 0

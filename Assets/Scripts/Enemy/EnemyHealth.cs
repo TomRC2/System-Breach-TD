@@ -36,6 +36,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
+
         if (isDead) return;
         isDead = true;
 
@@ -46,7 +47,9 @@ public class EnemyHealth : MonoBehaviour
 
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.RegisterKill(reward, isBoss);
-
+        PlayerPrefs.SetInt($"enemy_discovered_{displayName}", 1);
+        PlayerPrefs.Save();
+        Debug.Log($"Saving discovered: enemy_discovered_{displayName}");
         Destroy(gameObject);
     }
 

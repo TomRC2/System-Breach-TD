@@ -17,5 +17,9 @@ MonoBehaviour:
   hp: 1000
   speed: 1.5
   reward: 100
+  description: An elite-tier threat unlike anything seen in standard waves. Its HP
+    scales with each level, making it progressively more dangerous. Every level brings
+    a new, more powerful variant. Take it down before it corrupts everything.
+  sprite: {fileID: 1741014716, guid: d60622822805cb84ba37c418e3b46564, type: 3}
   isBoss: 1
   hpScalingPerLevel: 200

@@ -16,30 +16,54 @@ MonoBehaviour:
   prefab: {fileID: 2045985719052300516, guid: c3a35dc3df8a76a4a9d62ab2b854632d, type: 3}
   cost: 100
   critMultiplier: 2
+  towerType: 0
   attackSFX: {fileID: 8300000, guid: ee66a7be7b1d46a59af2e0b04eba0ae6, type: 3}
+  description: "Extreme range and devastating damage, but a very slow fire rate.
+    A specialist unit \u2014 best used to pick off high-HP targets like Tanks and
+    Bosses from across the board."
   levels:
   - damage: 15
     attackSpeed: 1
     range: 50
     critChance: 0
     upgradeCost: 300
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 20
     attackSpeed: 1.5
     range: 50
     critChance: 0.05
     upgradeCost: 750
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 30
     attackSpeed: 2
     range: 50
     critChance: 0.1
     upgradeCost: 1000
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 50
     attackSpeed: 2.5
     range: 50
     critChance: 0.2
     upgradeCost: 2000
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 75
     attackSpeed: 5
     range: 100
     critChance: 0.3
     upgradeCost: 0
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0

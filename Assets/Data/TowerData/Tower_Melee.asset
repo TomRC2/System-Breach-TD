@@ -16,30 +16,54 @@ MonoBehaviour:
   prefab: {fileID: 8564541740028555003, guid: dab628a151ec56c4dae4c3ba9ff6b730, type: 3}
   cost: 75
   critMultiplier: 2
+  towerType: 0
   attackSFX: {fileID: 8300000, guid: 6781c0e88f184116aeb752147bcb88bc, type: 3}
+  description: A short-range tower that delivers rapid close-range strikes. What
+    it lacks in range it makes up for in attack speed. Place it near tight corners
+    for more hits.
   levels:
   - damage: 7
     attackSpeed: 7
     range: 2
     critChance: 0
     upgradeCost: 300
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 10
     attackSpeed: 10
     range: 3
     critChance: 0.05
     upgradeCost: 600
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 15
     attackSpeed: 15
     range: 3
     critChance: 0.1
     upgradeCost: 1000
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 20
     attackSpeed: 15
     range: 4
     critChance: 0.2
     upgradeCost: 1500
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0
   - damage: 50
     attackSpeed: 20
     range: 5
     critChance: 0.3
     upgradeCost: 0
+    attackSpeedBonus: 0
+    damageBonus: 0
+    rangeBonus: 0
+    moneyPerWave: 0

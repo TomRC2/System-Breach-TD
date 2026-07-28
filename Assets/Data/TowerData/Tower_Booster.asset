@@ -17,6 +17,10 @@ MonoBehaviour:
   cost: 100
   critMultiplier: 2
   towerType: 1
+  attackSFX: {fileID: 0}
+  description: "Doesn't attack directly, but amplifies the damage, attack speed and
+    range of nearby towers. A force multiplier \u2014 a well-placed Booster can turn
+    a good defense into an impenetrable one."
   levels:
   - damage: 0
     attackSpeed: 0

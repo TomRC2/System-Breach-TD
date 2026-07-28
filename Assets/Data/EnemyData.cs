@@ -9,6 +9,7 @@ public class EnemyData : ScriptableObject
     public float speed;
     public float reward;
     [TextArea] public string description;
+    public Sprite sprite;
     [Header("Boss")]
     public bool isBoss = false;
     public float hpScalingPerLevel = 200f;

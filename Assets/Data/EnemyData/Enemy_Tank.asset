@@ -17,3 +17,9 @@ MonoBehaviour:
   hp: 500
   speed: 2
   reward: 40
+  description: A heavily armored trojan designed to absorb punishment. Moves at a
+    crawl but soaks up enormous amounts of damage. Prioritize it with Snipers or
+    upgraded Melee towers before it reaches the Core.
+  sprite: {fileID: -11532784, guid: d6a980cf269ea544393ed075570ada9e, type: 3}
+  isBoss: 0
+  hpScalingPerLevel: 200
