@@ -18,6 +18,7 @@ public class GalleryManager : MonoBehaviour
     public Sprite badgeSprite;
     public GameObject notificationBadge;
     public GameObject infoButtonBadge;
+    public GameObject galleryButtonBadge;
 
     [Header("UI - Tabs")]
     public Button towersTabButton;
@@ -299,6 +300,7 @@ public class GalleryManager : MonoBehaviour
 
         if (notificationBadge != null) notificationBadge.SetActive(hasNew);
         if (infoButtonBadge != null) infoButtonBadge.SetActive(hasNew);
+        if (galleryButtonBadge != null) galleryButtonBadge.SetActive(hasNew);
     }
     void SetLayerRecursively(GameObject go, int layer)
     {

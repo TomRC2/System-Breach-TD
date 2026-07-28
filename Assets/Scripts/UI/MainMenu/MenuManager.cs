@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using UnityEngine;
-
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance;
@@ -10,6 +10,11 @@ public class MenuManager : MonoBehaviour
     public GameObject panelOptions;
     public GameObject panelCredits;
     public GameObject panelInfo;
+    [Header("Info Sub-panels")]
+    public GameObject panelAchievements;
+    public GameObject panelGallery;
+
+    private Stack<GameObject> panelHistory = new Stack<GameObject>();
     void Awake()
     {
         Instance = this;
@@ -24,6 +29,15 @@ public class MenuManager : MonoBehaviour
         cam.OnArriveOptions += () => OpenPanel(panelOptions);
         cam.OnArriveInfo += () => OpenPanel(panelInfo);
     }
+    public void ShowAchievements()
+    {
+        OpenPanel(panelAchievements);
+    }
+
+    public void ShowGallery()
+    {
+        OpenPanel(panelGallery);
+    }
     public void ToggleCredits()
     {
         panelCredits.SetActive(!panelCredits.activeSelf);
@@ -36,10 +50,24 @@ public class MenuManager : MonoBehaviour
 
     void OpenPanel(GameObject panel)
     {
+        foreach (var p in new[] { panelMainMenu, panelOptions, panelLevelSelect, panelInfo, panelAchievements, panelGallery })
+            if (p.activeSelf) panelHistory.Push(p);
+
         CloseAllPanels();
         panel.SetActive(true);
     }
+    public void GoBack()
+    {
+        if (panelHistory.Count == 0)
+        {
+            CameraMenuController.Instance.GoHome();
+            return;
+        }
 
+        CloseAllPanels();
+        GameObject prev = panelHistory.Pop();
+        prev.SetActive(true);
+    }
     public void CloseAllPanels()
     {
         panelMainMenu.SetActive(false);
@@ -47,6 +75,8 @@ public class MenuManager : MonoBehaviour
         panelOptions.SetActive(false);
         panelCredits.SetActive(false);
         panelInfo.SetActive(false);
+        panelAchievements.SetActive(false);
+        panelGallery.SetActive(false);
     }
 
     public void QuitGame()
