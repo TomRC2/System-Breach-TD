@@ -49,7 +49,8 @@ public class EnemyHealth : MonoBehaviour
             ScoreManager.Instance.RegisterKill(reward, isBoss);
         PlayerPrefs.SetInt($"enemy_discovered_{displayName}", 1);
         PlayerPrefs.Save();
-        Debug.Log($"Saving discovered: enemy_discovered_{displayName}");
+        AchievementManager.Instance.RegisterKill();
+        AchievementManager.Instance.RegisterBossKill();
         Destroy(gameObject);
     }
 

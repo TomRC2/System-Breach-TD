@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
                     : $"Récord: {highscore}";
         }
 
+        AchievementManager.Instance.RegisterLevelCompleted();
         victoryPanel.SetActive(true);
     }
 

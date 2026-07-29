@@ -26,6 +26,7 @@ public class PlacementManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            AchievementManager.Instance.RegisterTowerPlaced();
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {

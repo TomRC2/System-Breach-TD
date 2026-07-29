@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cdcaa3dd19b7d4940a8e60248c54cecc, type: 3}
-  m_Name: virus_slayer
+  m_Name: VirusSlayer
   m_EditorClassIdentifier: Assembly-CSharp::AchievementData
   achievementID: virus_slayer
   achievementName: Virus Slayer
@@ -18,18 +18,18 @@ MonoBehaviour:
   icon: {fileID: 0}
   type: 0
   tiers:
-  - label: 
-    requirement: 0
+  - label: I
+    requirement: 50
     reward: 0
-  - label: 
-    requirement: 0
+  - label: II
+    requirement: 250
     reward: 0
-  - label: 
-    requirement: 0
+  - label: III
+    requirement: 1000
     reward: 0
-  - label: 
-    requirement: 0
+  - label: IV
+    requirement: 5000
     reward: 0
-  - label: 
-    requirement: 0
+  - label: V
+    requirement: 25000
     reward: 0
