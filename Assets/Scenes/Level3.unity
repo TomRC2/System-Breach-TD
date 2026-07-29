@@ -1636,10 +1636,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   levelNumber: 3
+  levelTimer: 0
   victoryPanel: {fileID: 1353827095}
   gameOverPanel: {fileID: 270797841}
   tutorialPanel: {fileID: 0}
   hud: {fileID: 1305006452}
+  computerHealth: {fileID: 1580153799}
   victoryScoreText: {fileID: 1108832558}
   victoryHighscoreText: {fileID: 734639937}
   gameOverScoreText: {fileID: 1685622360}
@@ -16079,6 +16081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComputerHealth
   maxHP: 1000
+  currentHP: 0
 --- !u!114 &1580153800
 MonoBehaviour:
   m_ObjectHideFlags: 0

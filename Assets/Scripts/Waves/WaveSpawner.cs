@@ -31,6 +31,7 @@ public class WaveSpawner : MonoBehaviour
     {
         startButton.SetActive(false);
         StartCoroutine(StartWave());
+        GameManager.Instance.StartLevelTimer();
     }
 
     IEnumerator StartWave()
@@ -60,6 +61,8 @@ public class WaveSpawner : MonoBehaviour
             else
                 StartCoroutine(NextWave());
         }
+        if (Time.timeScale == 2f)
+            AchievementManager.Instance?.RegisterOverclock();
     }
 
     void SpawnEnemy(EnemyData data)

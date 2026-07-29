@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdcaa3dd19b7d4940a8e60248c54cecc, type: 3}
+  m_Name: LevelCompletitionist
+  m_EditorClassIdentifier: Assembly-CSharp::AchievementData
+  achievementID: level_completitionist
+  achievementName: Level Completitionist
+  description: Levels Completed
+  icon: {fileID: -783338634, guid: 7fccccbb2cad646448d5bedf909eee29, type: 3}
+  type: 0
+  tiers:
+  - label: I
+    requirement: 1
+    reward: 0
+  - label: II
+    requirement: 3
+    reward: 0
+  - label: III
+    requirement: 5
+    reward: 0
+  - label: IV
+    requirement: 7
+    reward: 0
+  - label: V
+    requirement: 15
+    reward: 0

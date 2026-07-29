@@ -44,13 +44,16 @@ public class EnemyHealth : MonoBehaviour
 
         if (EconomyManager.Instance != null)
             EconomyManager.Instance.Earn((int)reward);
-
+        if (isBoss == true)
+        {
+            AchievementManager.Instance.RegisterBossKill();
+        }
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.RegisterKill(reward, isBoss);
         PlayerPrefs.SetInt($"enemy_discovered_{displayName}", 1);
         PlayerPrefs.Save();
         AchievementManager.Instance.RegisterKill();
-        AchievementManager.Instance.RegisterBossKill();
+        AchievementManager.Instance?.RegisterFirstBlood();
         Destroy(gameObject);
     }
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 
 public class PlacementManager : MonoBehaviour
 {
@@ -26,14 +27,15 @@ public class PlacementManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            AchievementManager.Instance.RegisterTowerPlaced();
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 GridCell cell = hit.collider.GetComponent<GridCell>();
                 if (cell != null)
                 {
-                    if (!EconomyManager.Instance.CanAfford(selectedTower.GetEffectiveCost()))
+                    int cost = selectedTower.GetEffectiveCost();
+
+                    if (!EconomyManager.Instance.CanAfford(cost))
                     {
                         Debug.Log("Dinero insuficiente");
                         return;
@@ -43,8 +45,27 @@ public class PlacementManager : MonoBehaviour
                     if (placed)
                     {
                         AudioManager.Instance?.PlaySFX(AudioManager.Instance.placeTowerSFX);
-                        EconomyManager.Instance.Spend(selectedTower.GetEffectiveCost());
+                        EconomyManager.Instance.Spend(cost);
                         TowerSelectionPanel.Instance.RefreshAllLabels();
+
+                        AchievementManager.Instance?.RegisterTowerPlaced();
+
+                        if (TowerSelectionPanel.Instance.allCells.All(c => c.isOccupied))
+                            AchievementManager.Instance?.RegisterFullGrid();
+
+                        bool hasAttack = false, hasBooster = false, hasFarm = false;
+                        foreach (GridCell c in TowerSelectionPanel.Instance.allCells)
+                        {
+                            if (!c.isOccupied) continue;
+                            TowerData data = c.GetPlacedTowerData();
+                            if (data == null) continue;
+                            if (data.towerType == TowerType.Attack) hasAttack = true;
+                            if (data.towerType == TowerType.Booster) hasBooster = true;
+                            if (data.towerType == TowerType.Farm) hasFarm = true;
+                        }
+                        if (hasAttack && hasBooster && hasFarm)
+                            AchievementManager.Instance?.RegisterFullArsenal();
+
                         DeselectTower();
                         TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
                         TowerSelectionPanel.Instance.panel.SetActive(true);

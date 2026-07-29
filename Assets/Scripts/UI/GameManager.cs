@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Level")]
     public int levelNumber;
-
+    public float levelTimer = 0f;
+    private bool levelStarted = false;
     [Header("Panels")]
     public GameObject victoryPanel;
     public GameObject gameOverPanel;
@@ -16,7 +17,8 @@ public class GameManager : MonoBehaviour
     public GameObject tutorialPanel;
     [Header("HUD")]
     public GameObject hud;
-
+    [Header("References")]
+    public ComputerHealth computerHealth;
     [Header("Score UI")]
     public TMP_Text victoryScoreText;
     public TMP_Text victoryHighscoreText;
@@ -37,7 +39,17 @@ public class GameManager : MonoBehaviour
         if (tutorialPanel != null)
             tutorialPanel.SetActive(!TutorialManager.IsTutorialDone());
     }
+    void Update()
+    {
+        if (levelStarted)
+            levelTimer += Time.unscaledDeltaTime;
+    }
 
+    public void StartLevelTimer()
+    {
+        levelStarted = true;
+        levelTimer = 0f;
+    }
     public void Victory()
     {
         if (gameEnded) return;
@@ -61,8 +73,13 @@ public class GameManager : MonoBehaviour
                     ? "¡Nuevo récord!"
                     : $"Récord: {highscore}";
         }
-
+        if (EconomyManager.Instance.GetTotalSpent() <= 750)
+            AchievementManager.Instance?.RegisterFrugal();
+        if (levelTimer <= 120f)
+            AchievementManager.Instance?.RegisterSpeedRun();
         AchievementManager.Instance.RegisterLevelCompleted();
+        if (computerHealth.currentHP >= computerHealth.maxHP)
+            AchievementManager.Instance?.RegisterNoDamage();
         victoryPanel.SetActive(true);
     }
 

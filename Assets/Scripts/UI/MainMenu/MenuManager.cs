@@ -13,6 +13,9 @@ public class MenuManager : MonoBehaviour
     [Header("Info Sub-panels")]
     public GameObject panelAchievements;
     public GameObject panelGallery;
+    [Header("Achievement Badge")]
+    public GameObject achievementBadge;
+    public GameObject infoBadgeAchievement;
 
     private Stack<GameObject> panelHistory = new Stack<GameObject>();
     void Awake()
@@ -23,6 +26,11 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
+        if (achievementBadge != null)
+            achievementBadge.SetActive(PlayerPrefs.GetInt("ach_new_notification", 0) == 1);
+        bool hasNew = PlayerPrefs.GetInt("ach_new_notification", 0) == 1;
+        if (achievementBadge != null) achievementBadge.SetActive(hasNew);
+        if (infoBadgeAchievement != null) infoBadgeAchievement.SetActive(hasNew);
         CameraMenuController cam = CameraMenuController.Instance;
         cam.OnArriveHome += () => OpenPanel(panelMainMenu);
         cam.OnArriveLevelSelect += () => OpenPanel(panelLevelSelect);
@@ -31,6 +39,10 @@ public class MenuManager : MonoBehaviour
     }
     public void ShowAchievements()
     {
+        PlayerPrefs.SetInt("ach_new_notification", 0);
+        PlayerPrefs.Save();
+        if (infoBadgeAchievement != null) infoBadgeAchievement.SetActive(false);
+        if (achievementBadge != null) achievementBadge.SetActive(false);
         OpenPanel(panelAchievements);
     }
 

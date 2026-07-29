@@ -23,7 +23,6 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    // Incrementa el progreso de un logro por su ID
     public void AddProgress(string achievementID, int amount = 1)
     {
         AchievementData data = GetData(achievementID);
@@ -34,37 +33,53 @@ public class AchievementManager : MonoBehaviour
         PlayerPrefs.SetInt($"ach_progress_{achievementID}", newProgress);
         PlayerPrefs.Save();
 
+        int currentTier = GetCurrentTier(achievementID);
+        if (currentTier < data.tiers.Length && newProgress >= data.tiers[currentTier].requirement)
+        {
+            bool alreadyNotified = PlayerPrefs.GetInt($"ach_notified_{achievementID}_{currentTier}", 0) == 1;
+            if (!alreadyNotified)
+            {
+                PlayerPrefs.SetInt($"ach_notified_{achievementID}_{currentTier}", 1);
+                PlayerPrefs.SetInt("ach_new_notification", 1);
+                PlayerPrefs.Save();
+                if (AchievementNotification.Instance != null)
+                    AchievementNotification.Instance.Show(data, currentTier);
+            }
+        }
+
         OnAchievementUpdated?.Invoke();
     }
 
-    // Devuelve el progreso actual
     public int GetProgress(string achievementID)
     {
         return PlayerPrefs.GetInt($"ach_progress_{achievementID}", 0);
     }
 
-    // Devuelve el tier actual completado (0 = ninguno)
     public int GetCurrentTier(string achievementID)
     {
         return PlayerPrefs.GetInt($"ach_tier_{achievementID}", 0);
     }
 
-    // Devuelve si el logro single está completado
     public bool IsSingleCompleted(string achievementID)
     {
         return PlayerPrefs.GetInt($"ach_single_{achievementID}", 0) == 1;
     }
 
-    // Completa un logro single
     public void CompleteSingle(string achievementID)
     {
         if (IsSingleCompleted(achievementID)) return;
+
+        AchievementData data = GetData(achievementID);
         PlayerPrefs.SetInt($"ach_single_{achievementID}", 1);
+        PlayerPrefs.SetInt("ach_new_notification", 1);
         PlayerPrefs.Save();
+
+        if (AchievementNotification.Instance != null)
+            AchievementNotification.Instance.Show(data);
+
         OnAchievementUpdated?.Invoke();
     }
 
-    // Verifica si el siguiente tier está listo para claimear
     public bool CanClaim(string achievementID)
     {
         AchievementData data = GetData(achievementID);
@@ -77,16 +92,19 @@ public class AchievementManager : MonoBehaviour
         return progress >= data.tiers[currentTier].requirement;
     }
 
-    // Claimea el siguiente tier
     public void Claim(string achievementID)
     {
-        if (!CanClaim(achievementID)) return;
+        if (!CanClaim(achievementID))return;
 
+        AchievementData data = GetData(achievementID);
         int currentTier = GetCurrentTier(achievementID);
-        // TODO: dar recompensa data.tiers[currentTier].reward cuando esté el sistema
 
         PlayerPrefs.SetInt($"ach_tier_{achievementID}", currentTier + 1);
+        PlayerPrefs.SetInt("ach_new_notification", 1);
         PlayerPrefs.Save();
+
+        if (AchievementNotification.Instance != null)
+            AchievementNotification.Instance.Show(data, currentTier);
 
         OnAchievementUpdated?.Invoke();
     }
@@ -98,7 +116,6 @@ public class AchievementManager : MonoBehaviour
         return null;
     }
 
-    // Accesos rápidos para los logros específicos
     public void RegisterKill() => AddProgress("virus_slayer");
     public void RegisterBossKill() => AddProgress("boss_slayer");
     public void RegisterAdWatched() => AddProgress("ads_watcher");

@@ -32,7 +32,17 @@ public class GridCell : MonoBehaviour
         UpdateVisual();
         return true;
     }
-
+    public TowerData GetPlacedTowerData()
+    {
+        if (!isOccupied || placedTower == null) return null;
+        TowerController tc = placedTower.GetComponent<TowerController>();
+        if (tc != null) return tc.GetData();
+        BoosterTower bt = placedTower.GetComponent<BoosterTower>();
+        if (bt != null) return bt.GetData();
+        FarmTower ft = placedTower.GetComponent<FarmTower>();
+        if (ft != null) return ft.GetData();
+        return null;
+    }
     public void FreeCellAndDestroy()
     {
         if (!isOccupied) return;

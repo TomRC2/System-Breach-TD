@@ -155,7 +155,7 @@ public class TowerInfoPanel : MonoBehaviour
     void SellFarm(FarmTower farm, int sellValue)
     {
         EconomyManager.Instance.Earn(sellValue);
-
+        AchievementManager.Instance?.RegisterSell();
         GameObject farmRoot = farm.gameObject;
         GridCell[] cells = FindObjectsByType<GridCell>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         foreach (GridCell cell in cells)
@@ -250,13 +250,17 @@ public class TowerInfoPanel : MonoBehaviour
 
         currentTower.Upgrade();
         currentTower.GetComponent<TowerClickHandler>().RefreshRange();
+
+        if (!currentTower.CanUpgrade())
+            AchievementManager.Instance?.RegisterMaxOut();
+
         RefreshPanel();
     }
 
     void SellTower(int sellValue)
     {
         EconomyManager.Instance.Earn(sellValue);
-
+        AchievementManager.Instance?.RegisterSell();
         GameObject towerRoot = currentTower.gameObject;
 
         GridCell[] cells = FindObjectsByType<GridCell>(FindObjectsInactive.Include, FindObjectsSortMode.None);
@@ -276,7 +280,7 @@ public class TowerInfoPanel : MonoBehaviour
     void SellBooster(BoosterTower booster, int sellValue)
     {
         EconomyManager.Instance.Earn(sellValue);
-
+        AchievementManager.Instance?.RegisterSell();
         GameObject boosterRoot = booster.gameObject;
 
         GridCell[] cells = FindObjectsByType<GridCell>(FindObjectsInactive.Include, FindObjectsSortMode.None);

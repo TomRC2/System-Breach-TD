@@ -4,7 +4,7 @@ using UnityEngine;
 public class ComputerHealth : MonoBehaviour
 {
     public float maxHP = 1000f;
-    private float currentHP;
+    public float currentHP;
     public event Action<float, float> OnHPChanged;
     void Start()
     {

@@ -30,6 +30,14 @@ public class AchievementsPanel : MonoBehaviour
         if (AchievementManager.Instance == null) return;
 
         AchievementData[] achievements = AchievementManager.Instance.achievements;
+
+        System.Array.Sort(achievements, (a, b) =>
+        {
+            bool aClaimable = AchievementManager.Instance.CanClaim(a.achievementID);
+            bool bClaimable = AchievementManager.Instance.CanClaim(b.achievementID);
+            return bClaimable.CompareTo(aClaimable);
+        });
+
         achievementUIs = new AchievementUI[achievements.Length];
 
         for (int i = 0; i < achievements.Length; i++)

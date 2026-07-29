@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AchievementData
   achievementID: virus_slayer
   achievementName: Virus Slayer
-  description: EqUisde
-  icon: {fileID: 0}
+  description: EnemyKilled
+  icon: {fileID: -2001241553, guid: fda5c95e653d9644e931c36ac042ba93, type: 3}
   type: 0
   tiers:
   - label: I

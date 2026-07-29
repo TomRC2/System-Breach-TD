@@ -4,7 +4,7 @@ using System;
 public class EconomyManager : MonoBehaviour
 {
     public static EconomyManager Instance;
-
+    private int totalSpent = 0;
     public event Action<int> OnMoneyChanged;
 
     [Header("Config")]
@@ -29,16 +29,18 @@ public class EconomyManager : MonoBehaviour
     {
         currentMoney += amount;
         OnMoneyChanged?.Invoke(currentMoney);
+        if (currentMoney >= 5000)
+            AchievementManager.Instance?.RegisterRAMHoarder();
     }
 
     public bool Spend(int amount)
     {
-        if (!CanAfford(amount)) return false;
+        if (currentMoney < amount) return false;
         currentMoney -= amount;
+        totalSpent += amount;
         OnMoneyChanged?.Invoke(currentMoney);
-        AudioManager.Instance?.PlaySFX(AudioManager.Instance.spendMoneySFX);
         return true;
     }
-
+    public int GetTotalSpent() => totalSpent;
     public int GetMoney() => currentMoney;
 }

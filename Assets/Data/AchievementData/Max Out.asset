@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdcaa3dd19b7d4940a8e60248c54cecc, type: 3}
+  m_Name: Max Out
+  m_EditorClassIdentifier: Assembly-CSharp::AchievementData
+  achievementID: max_out
+  achievementName: Max Out
+  description: Lvl5 turret
+  icon: {fileID: 1329122525, guid: ce23241ba73a32446b38eed889f3a1c7, type: 3}
+  type: 1
+  tiers: []
