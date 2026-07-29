@@ -16,5 +16,20 @@ MonoBehaviour:
   achievementName: Overclock
   description: Play 50 waves with x2
   icon: {fileID: 1225413209, guid: ac754fc586438b148af0bb51315c1c8a, type: 3}
-  type: 1
-  tiers: []
+  type: 0
+  tiers:
+  - label: I
+    requirement: 1
+    reward: 0
+  - label: II
+    requirement: 10
+    reward: 0
+  - label: III
+    requirement: 25
+    reward: 0
+  - label: IV
+    requirement: 50
+    reward: 0
+  - label: V
+    requirement: 100
+    reward: 0
