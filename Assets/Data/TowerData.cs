@@ -11,12 +11,10 @@ public class TowerLevel
     public float critChance;
     public int upgradeCost;
 
-    // Booster
     public float attackSpeedBonus;
     public float damageBonus;
     public float rangeBonus;
 
-    // Farm
     public int moneyPerWave;
 }
 
@@ -36,7 +34,6 @@ public class TowerData : ScriptableObject
     {
         if (towerType != TowerType.Farm) return cost;
         int effective = Mathf.RoundToInt(cost * Mathf.Pow(1.5f, FarmTower.farmCount));
-        Debug.Log($"{towerName} effective cost: {effective}, farmCount: {FarmTower.farmCount}");
         return effective;
     }
 }

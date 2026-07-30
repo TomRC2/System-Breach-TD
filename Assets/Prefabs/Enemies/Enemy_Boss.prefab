@@ -186,6 +186,9 @@ MonoBehaviour:
   maxHP: 100
   reward: 250
   isBoss: 1
+  displayName: 
+  healthBar: {fileID: 0}
+  damageTextPrefab: {fileID: 0}
 --- !u!114 &5315261341721715549
 MonoBehaviour:
   m_ObjectHideFlags: 0

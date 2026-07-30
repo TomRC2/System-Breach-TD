@@ -106,6 +106,7 @@ public class TowerController : MonoBehaviour
     float CalculateDamage()
     {
         bool isCrit = Random.value < GetEffectiveStats().critChance;
+        float damage = isCrit ? GetEffectiveStats().damage * data.critMultiplier : GetEffectiveStats().damage;
         return isCrit
             ? GetEffectiveStats().damage * data.critMultiplier
             : GetEffectiveStats().damage;

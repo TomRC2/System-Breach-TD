@@ -10,6 +10,13 @@ public class PauseManager : MonoBehaviour
     [Header("Panel")]
     public GameObject pausePanel;
 
+    [Header("Combat Visual Toggles")]
+    public Toggle healthBarToggle;
+    public Toggle damageTextToggle;
+
+    private const string KEY_HEALTHBAR = "show_health_bar";
+    private const string KEY_DAMAGETEXT = "show_damage_text";
+
     [Header("HUD")]
     public GameObject hud;
 
@@ -31,6 +38,12 @@ public class PauseManager : MonoBehaviour
         musicSlider.value = PlayerPrefs.GetFloat("vol_music", 1f);
         sfxSlider.value = PlayerPrefs.GetFloat("vol_sfx", 1f);
         autoSkipToggle.isOn = PlayerPrefs.GetInt("auto_skip", 0) == 1;
+
+        healthBarToggle.isOn = PlayerPrefs.GetInt(KEY_HEALTHBAR, 1) == 1;
+        damageTextToggle.isOn = PlayerPrefs.GetInt(KEY_DAMAGETEXT, 1) == 1;
+
+        healthBarToggle.onValueChanged.AddListener(v => PlayerPrefs.SetInt(KEY_HEALTHBAR, v ? 1 : 0));
+        damageTextToggle.onValueChanged.AddListener(v => PlayerPrefs.SetInt(KEY_DAMAGETEXT, v ? 1 : 0));
 
         musicSlider.onValueChanged.AddListener(v =>
         {
@@ -93,4 +106,7 @@ public class PauseManager : MonoBehaviour
         PlayerPrefs.Save();
         SceneManager.LoadScene("MainMenu");
     }
+
+    public static bool IsHealthBarEnabled() => PlayerPrefs.GetInt("show_health_bar", 1) == 1;
+    public static bool IsDamageTextEnabled() => PlayerPrefs.GetInt("show_damage_text", 1) == 1;
 }

@@ -12,13 +12,18 @@ public class EnemyHealth : MonoBehaviour
     private bool initialized = false;
     private bool isDead = false;
 
+    [Header("Combat Visuals")]
+    public EnemyHealthBar healthBar;
+    public GameObject damageTextPrefab;
+
     public Action OnDeath;
     public Action OnReach;
 
     void Start()
     {
-        if (!initialized)
-            Initialize();
+        currentHP = maxHP;
+        if (healthBar != null)
+            healthBar.Setup(transform, maxHP);
     }
 
     public void Initialize()
@@ -27,10 +32,20 @@ public class EnemyHealth : MonoBehaviour
         initialized = true;
     }
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, bool isCrit = false)
     {
         if (isDead) return;
         currentHP -= amount;
+
+        if (healthBar != null)
+            healthBar.UpdateHP(currentHP);
+
+        if (damageTextPrefab != null && OptionsManager.IsDamageTextEnabled())
+        {
+            GameObject go = Instantiate(damageTextPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+            go.GetComponent<DamageText>().Setup(amount, isCrit, transform.position + Vector3.up * 0.5f);
+        }
+
         if (currentHP <= 0) Die();
     }
 
