@@ -54,15 +54,36 @@ public class WaveSpawner : MonoBehaviour
 
         spawning = false;
 
-        if (activeEnemies <= 0)
-        {
-            if (currentWave >= waves.Count - 1)
-                GameManager.Instance.Victory();
-            else
-                StartCoroutine(NextWave());
-        }
-        if (Time.timeScale == 2f)
+        CheckWaveCleared();
+
+        if (Time.timeScale >= 2f)
             AchievementManager.Instance?.RegisterOverclock();
+    }
+
+    // Atajo de teclado: Espacio inicia el juego o salta la espera entre oleadas
+    void Update()
+    {
+        if (PauseManager.Instance != null && PauseManager.Instance.IsPaused) return;
+        if (GameManager.Instance != null && GameManager.Instance.IsGameEnded) return;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (startButton != null && startButton.activeSelf)
+                BeginGame();
+            else
+                WaveCountdownPanel.Instance?.SkipIfVisible();
+        }
+    }
+
+    // Logica unificada de fin de oleada (antes duplicada en dos lugares)
+    void CheckWaveCleared()
+    {
+        if (activeEnemies > 0 || spawning) return;
+
+        if (currentWave >= waves.Count - 1)
+            GameManager.Instance.Victory();
+        else
+            StartCoroutine(NextWave());
     }
 
     void SpawnEnemy(EnemyData data)
@@ -104,13 +125,7 @@ public class WaveSpawner : MonoBehaviour
     void OnEnemyDefeated()
     {
         activeEnemies--;
-        if (activeEnemies <= 0)
-        {
-            if (currentWave >= waves.Count - 1 && !spawning)
-                GameManager.Instance.Victory();
-            else if (!spawning)
-                StartCoroutine(NextWave());
-        }
+        CheckWaveCleared();
     }
 
     public void SkipWaitTime()
@@ -121,14 +136,14 @@ public class WaveSpawner : MonoBehaviour
     IEnumerator NextWave()
     {
         skipWait = false;
-        WaveCountdownPanel.Instance.StartCountdown(timeBetweenWaves);
+        WaveCountdownPanel.Instance?.StartCountdown(timeBetweenWaves);
         float elapsed = 0f;
         while (elapsed < timeBetweenWaves && !skipWait)
         {
             elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
-        WaveCountdownPanel.Instance.Hide();
+        WaveCountdownPanel.Instance?.Hide();
         currentWave++;
         StartCoroutine(StartWave());
     }

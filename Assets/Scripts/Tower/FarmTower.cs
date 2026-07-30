@@ -40,9 +40,11 @@ public class FarmTower : MonoBehaviour
     public bool CanUpgrade() => currentLevel < data.levels.Length - 1;
     public int GetUpgradeCost() => data.levels[currentLevel].upgradeCost;
     void OnEnable() { farmCount++; }
-    void OnDestroy()
+    // OnDisable en vez de OnDestroy: Destroy() se aplica al final del frame,
+    // asi el precio de la siguiente farm se recalcula bien justo al vender.
+    void OnDisable()
     {
-        farmCount--;
+        farmCount = Mathf.Max(0, farmCount - 1);
         if (WaveSpawner.Instance != null)
             WaveSpawner.Instance.OnWaveChanged -= OnWaveStarted;
     }

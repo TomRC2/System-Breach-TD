@@ -28,6 +28,9 @@ public class GridCell : MonoBehaviour
         else if (data.towerType == TowerType.Farm)
             placedTower.GetComponent<FarmTower>().Initialize(data);
 
+        // Animacion de aparicion (pop de escala)
+        placedTower.AddComponent<TowerScaleFX>().PlaySpawn();
+
         isOccupied = true;
         UpdateVisual();
         return true;
@@ -46,7 +49,11 @@ public class GridCell : MonoBehaviour
     public void FreeCellAndDestroy()
     {
         if (!isOccupied) return;
-        Destroy(placedTower);
+        if (placedTower != null)
+        {
+            placedTower.SetActive(false); // dispara OnDisable de inmediato (Destroy es diferido)
+            Destroy(placedTower);
+        }
         placedTower = null;
         isOccupied = false;
         UpdateVisual();

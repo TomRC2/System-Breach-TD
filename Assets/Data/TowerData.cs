@@ -16,6 +16,14 @@ public class TowerLevel
     public float rangeBonus;
 
     public int moneyPerWave;
+
+    [Header("Efectos opcionales (0 = desactivado)")]
+    [Tooltip("Radio de danio en area al impactar")]
+    public float splashRadius;
+    [Tooltip("Fraccion de ralentizacion aplicada al enemigo (0.3 = 30% mas lento)")]
+    [Range(0f, 0.9f)] public float slowAmount;
+    [Tooltip("Duracion de la ralentizacion en segundos")]
+    public float slowDuration;
 }
 
 [CreateAssetMenu(fileName = "TowerData", menuName = "SystemBreach/Tower Data")]

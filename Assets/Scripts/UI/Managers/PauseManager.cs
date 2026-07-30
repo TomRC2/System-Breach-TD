@@ -26,6 +26,7 @@ public class PauseManager : MonoBehaviour
     public Toggle autoSkipToggle;
 
     private bool isPaused = false;
+    public bool IsPaused => isPaused;
     private float timeScaleBeforePause = 1f;
 
     void Awake()
@@ -72,6 +73,14 @@ public class PauseManager : MonoBehaviour
     }
     void Update()
     {
+        // No permitir pausar cuando la partida ya termino (victoria/derrota)
+        if (GameManager.Instance != null && GameManager.Instance.IsGameEnded) return;
+
+        // Si se esta colocando una torre, Escape la cancela (no abre la pausa)
+        if (PlacementManager.Instance != null &&
+            (PlacementManager.Instance.HasSelection || PlacementManager.LastCancelFrame == Time.frameCount))
+            return;
+
         if (Input.GetKeyDown(KeyCode.Escape))
             TogglePause();
     }

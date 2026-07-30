@@ -13,7 +13,7 @@ public class TowerSelectionPanel : MonoBehaviour
     [Header("Torres disponibles")]
     public TowerData[] availableTowers;
 
-    [Header("Prefab de botón")]
+    [Header("Prefab de botï¿½n")]
     public GameObject towerButtonPrefab;
     public Transform buttonContainer;
 
@@ -84,6 +84,20 @@ public class TowerSelectionPanel : MonoBehaviour
         {
             PlacementManager.Instance.DeselectTower();
             HideGrid();
+        }
+    }
+
+    void Update()
+    {
+        // Atajos: teclas 1-9 seleccionan la torre correspondiente
+        for (int i = 0; i < availableTowers.Length && i < 9; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                TowerClickHandler.DeselectCurrent(); // cierra panel de info y resaltado si habia
+                SelectTower(availableTowers[i]);
+                break;
+            }
         }
     }
 

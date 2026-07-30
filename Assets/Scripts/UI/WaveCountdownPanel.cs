@@ -50,6 +50,13 @@ public class WaveCountdownPanel : MonoBehaviour
         Hide();
     }
 
+    // Llamado por el atajo de teclado (Espacio)
+    public void SkipIfVisible()
+    {
+        if (panel != null && panel.activeSelf)
+            Skip();
+    }
+
     public void Skip()
     {
         StopAllCoroutines();

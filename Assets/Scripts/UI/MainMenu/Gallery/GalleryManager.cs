@@ -58,6 +58,8 @@ public class GalleryManager : MonoBehaviour
     public TMP_Text descriptionText;
 
     private GameObject currentModelInstance;
+    private EnemyData currentEnemyData;
+    private Image enemyFullViewImage; // se crea por codigo la primera vez
     private Dictionary<EnemyData, GameObject> enemyBadges = new Dictionary<EnemyData, GameObject>();
 
     void Start()
@@ -69,6 +71,7 @@ public class GalleryManager : MonoBehaviour
         {
             fullViewPanel.SetActive(true);
             galleryPanel.SetActive(false);
+            SetupFullView(); // mostrar enemigo o torre segun lo seleccionado
         });
 
         closeFullViewButton.onClick.AddListener(() =>
@@ -183,6 +186,7 @@ public class GalleryManager : MonoBehaviour
     public void SelectTower(TowerData data)
     {
         currentTowerData = data;
+        currentEnemyData = null;
         currentTowerLevel = 0;
 
         viewer3D.SetActive(true);
@@ -230,10 +234,20 @@ public class GalleryManager : MonoBehaviour
     }
     public void SelectEnemy(EnemyData data)
     {
+        if (data == null) return;
         PlayerPrefs.SetInt($"enemy_seen_{data.enemyName}", 1);
         PlayerPrefs.Save();
         RefreshNotification();
-        if (data == null) return;
+
+        currentEnemyData = data;
+        currentTowerData = null;
+
+        // eliminar el modelo 3D residual de la torre anterior
+        if (currentModelInstance != null)
+        {
+            Destroy(currentModelInstance);
+            currentModelInstance = null;
+        }
 
         viewer3D.SetActive(false);
         viewer2D.SetActive(true);
@@ -248,6 +262,43 @@ public class GalleryManager : MonoBehaviour
         if (damageText != null) damageText.text = discovered ? $"Daño al núcleo: {data.hp:F0}" : "?";
         if (speedText != null) speedText.text = discovered ? $"Velocidad: {data.speed:F1}" : "?";
         if (descriptionText != null) descriptionText.text = discovered ? data.description : "???";
+    }
+
+    // Configura la vista ampliada segun lo seleccionado:
+    // torre -> visor 3D como siempre; enemigo -> sprite ampliado por encima
+    void SetupFullView()
+    {
+        bool showingEnemy = currentEnemyData != null;
+
+        if (enemyFullViewImage == null && showingEnemy)
+        {
+            GameObject go = new GameObject("EnemyFullView");
+            go.transform.SetParent(fullViewPanel.transform, false);
+            enemyFullViewImage = go.AddComponent<Image>();
+            enemyFullViewImage.preserveAspect = true;
+            enemyFullViewImage.raycastTarget = false;
+
+            RectTransform rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = new Vector2(0.15f, 0.15f);
+            rt.anchorMax = new Vector2(0.85f, 0.85f);
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            // dejar el boton de cerrar por encima del sprite
+            if (closeFullViewButton != null)
+                closeFullViewButton.transform.SetAsLastSibling();
+        }
+
+        if (enemyFullViewImage != null)
+        {
+            enemyFullViewImage.gameObject.SetActive(showingEnemy);
+            if (showingEnemy)
+            {
+                bool discovered = PlayerPrefs.GetInt($"enemy_discovered_{currentEnemyData.enemyName}", 0) == 1;
+                enemyFullViewImage.sprite = currentEnemyData.sprite;
+                enemyFullViewImage.color = discovered ? Color.white : Color.black;
+            }
+        }
     }
 
     void SpawnModel(GameObject prefab)

@@ -78,37 +78,16 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
             owner = boosterTower.transform;
         }
 
-        rangeSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        // Anillo plano en el suelo (mas legible que la esfera transparente)
+        rangeSphere = new GameObject("RangeIndicator");
         rangeSphere.transform.position = owner.position;
-        rangeSphere.transform.localScale = Vector3.one * range * 2f;
-        Destroy(rangeSphere.GetComponent<Collider>());
-
-        if (rangeMaterial != null)
-        {
-            // Material asignado desde el Inspector — seguro en builds
-            rangeSphere.GetComponent<Renderer>().sharedMaterial = rangeMaterial;
-        }
-        else
-        {
-            // Fallback: buscar shader en runtime (puede fallar en builds con shader stripping)
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit");
-            if (shader != null)
-            {
-                Material mat = new Material(shader);
-                mat.SetFloat("_Surface", 1f);
-                mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                mat.SetInt("_ZWrite", 0);
-                mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-                mat.renderQueue = 3000;
-                mat.color = new Color(0.4f, 0.8f, 1f, 0.15f);
-                rangeSphere.GetComponent<Renderer>().material = mat;
-            }
-            else
-            {
-                Debug.LogWarning("TowerClickHandler: shader URP/Lit no encontrado. Asigna 'rangeMaterial' en el Inspector.");
-            }
-        }
+        LineRenderer lr = rangeSphere.AddComponent<LineRenderer>();
+        lr.useWorldSpace = false;
+        lr.loop = true;
+        lr.material = FXUtil.SharedSpriteMaterial;
+        lr.startWidth = lr.endWidth = 0.08f;
+        lr.startColor = lr.endColor = new Color(0.4f, 0.9f, 1f, 0.9f);
+        SetRingRadius(lr, range);
 
         rangeSphere.SetActive(range > 0f);
 
@@ -118,6 +97,13 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
             TowerInfoPanel.Instance.ShowBooster(boosterTower);
         else if (farmTower != null)
             TowerInfoPanel.Instance.ShowFarm(farmTower);
+    }
+
+    // Deselecciona la torre actualmente seleccionada (si la hay), desde cualquier script
+    public static void DeselectCurrent()
+    {
+        if (currentSelected != null)
+            currentSelected.Deselect();
     }
 
     public void Deselect()
@@ -135,9 +121,28 @@ public class TowerClickHandler : MonoBehaviour, IPointerClickHandler
     public void RefreshRange()
     {
         if (rangeSphere == null) return;
-        float range = towerController != null
-            ? towerController.GetEffectiveStats().range
-            : boosterTower.GetCurrentLevelStats().range;
-        rangeSphere.transform.localScale = Vector3.one * range * 2f;
+
+        float range;
+        if (towerController != null)
+            range = towerController.GetEffectiveStats().range;
+        else if (boosterTower != null)
+            range = boosterTower.GetCurrentLevelStats().range;
+        else
+            return; // las farms no tienen rango
+
+        LineRenderer lr = rangeSphere.GetComponent<LineRenderer>();
+        if (lr != null) SetRingRadius(lr, range);
+    }
+
+    // Genera los puntos del circulo a la altura del suelo
+    static void SetRingRadius(LineRenderer lr, float radius)
+    {
+        int segments = 64;
+        lr.positionCount = segments;
+        for (int i = 0; i < segments; i++)
+        {
+            float angle = i * Mathf.PI * 2f / segments;
+            lr.SetPosition(i, new Vector3(Mathf.Cos(angle) * radius, 0.05f, Mathf.Sin(angle) * radius));
+        }
     }
 }

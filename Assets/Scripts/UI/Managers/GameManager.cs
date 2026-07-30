@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text gameOverScoreText;
 
     private bool gameEnded = false;
+    public bool IsGameEnded => gameEnded;
 
     void Awake()
     {
@@ -70,15 +71,15 @@ public class GameManager : MonoBehaviour
 
             if (victoryHighscoreText != null)
                 victoryHighscoreText.text = score >= highscore
-                    ? "¡Nuevo récord!"
-                    : $"Récord: {highscore}";
+                    ? "Â¡Nuevo rÃ©cord!"
+                    : $"RÃ©cord: {highscore}";
         }
         if (EconomyManager.Instance.GetTotalSpent() <= 750)
             AchievementManager.Instance?.RegisterFrugal();
         if (levelTimer <= 120f)
             AchievementManager.Instance?.RegisterSpeedRun();
-        AchievementManager.Instance.RegisterLevelCompleted();
-        if (computerHealth.currentHP >= computerHealth.maxHP)
+        AchievementManager.Instance?.RegisterLevelCompleted();
+        if (computerHealth != null && computerHealth.currentHP >= computerHealth.maxHP)
             AchievementManager.Instance?.RegisterNoDamage();
         victoryPanel.SetActive(true);
     }

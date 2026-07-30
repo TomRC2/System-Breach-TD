@@ -6,6 +6,10 @@ public class PlacementManager : MonoBehaviour
     public static PlacementManager Instance;
     private TowerData selectedTower;
 
+    public bool HasSelection => selectedTower != null;
+    // Frame en el que se cancelo la colocacion (para que Escape no abra la pausa a la vez)
+    public static int LastCancelFrame = -1;
+
     void Awake()
     {
         Instance = this;
@@ -24,6 +28,15 @@ public class PlacementManager : MonoBehaviour
     void Update()
     {
         if (selectedTower == null) return;
+
+        // Cancelar con Escape ademas de clic derecho
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            LastCancelFrame = Time.frameCount;
+            DeselectTower();
+            TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
+            return;
+        }
 
         if (Input.GetMouseButtonDown(0))
         {

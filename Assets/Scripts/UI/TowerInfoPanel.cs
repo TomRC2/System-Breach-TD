@@ -26,8 +26,13 @@ public class TowerInfoPanel : MonoBehaviour
     public Button upgradeButton;
     public Button sellButton;
 
+    [Header("Economia")]
+    [Tooltip("Fraccion del dinero invertido (coste + mejoras) que se recupera al vender")]
+    [Range(0f, 1f)] public float sellRefund = 0.5f;
+
     private TowerController currentTower;
     private BoosterTower currentBooster;
+    private FarmTower currentFarm;
 
     void Awake()
     {
@@ -41,7 +46,25 @@ public class TowerInfoPanel : MonoBehaviour
         sellButton.interactable = false;
 
         if (EconomyManager.Instance != null)
-            EconomyManager.Instance.OnMoneyChanged += _ => RefreshButtons();
+            EconomyManager.Instance.OnMoneyChanged += _ => OnMoneyChanged();
+    }
+
+    // Antes solo se refrescaba la torre de ataque: boosters y farms quedaban
+    // con el boton de mejora desactivado aunque consiguieras el dinero.
+    void OnMoneyChanged()
+    {
+        if (currentTower != null) RefreshButtons();
+        else if (currentBooster != null) ShowBooster(currentBooster);
+        else if (currentFarm != null) ShowFarm(currentFarm);
+    }
+
+    // Valor de venta = % de todo lo invertido (coste base + mejoras compradas)
+    int SellValueFor(TowerData data, int upgradesBought)
+    {
+        int invested = data.cost;
+        for (int i = 0; i < upgradesBought && i < data.levels.Length; i++)
+            invested += data.levels[i].upgradeCost;
+        return Mathf.RoundToInt(invested * sellRefund);
     }
 
     public void Show(TowerController tower)
@@ -51,6 +74,7 @@ public class TowerInfoPanel : MonoBehaviour
         TowerSelectionPanel.Instance.panel.SetActive(false);
         currentTower = tower;
         currentBooster = null;
+        currentFarm = null;
         focusContainer.SetActive(true);
 
         focusPrevButton.onClick.RemoveAllListeners();
@@ -69,6 +93,7 @@ public class TowerInfoPanel : MonoBehaviour
         TowerSelectionPanel.Instance.panel.SetActive(false);
         currentBooster = booster;
         currentTower = null;
+        currentFarm = null;
         focusContainer.SetActive(false);
         panel.SetActive(true);
 
@@ -81,8 +106,8 @@ public class TowerInfoPanel : MonoBehaviour
         rangeText.text = level.rangeBonus > 0 ? $"Range bonus: +{level.rangeBonus * 100:F0}%" : "Range bonus: -";
         levelText.text = $"Level: {booster.GetCurrentLevel()} / {data.levels.Length}";
 
-        bool canUpgrade = booster.GetCurrentLevel() < booster.GetData().levels.Length;
-        bool canAfford = EconomyManager.Instance.CanAfford(booster.GetCurrentLevelStats().upgradeCost);
+        bool canUpgrade = booster.GetCurrentLevel() < data.levels.Length;
+        bool canAfford = EconomyManager.Instance.CanAfford(level.upgradeCost);
 
         upgradeButton.interactable = canUpgrade && canAfford;
         upgradeButton.onClick.RemoveAllListeners();
@@ -91,26 +116,30 @@ public class TowerInfoPanel : MonoBehaviour
             {
                 EconomyManager.Instance.Spend(booster.GetCurrentLevelStats().upgradeCost);
                 booster.Upgrade();
-                booster.GetComponent<TowerClickHandler>().RefreshRange();
+                booster.GetComponent<TowerScaleFX>()?.PlayUpgrade();
+                TowerClickHandler handler = booster.GetComponentInChildren<TowerClickHandler>();
+                if (handler != null) handler.RefreshRange();
                 ShowBooster(booster);
             });
 
         TMP_Text upgradeLabel = upgradeButton.GetComponentInChildren<TMP_Text>();
         if (upgradeLabel != null)
-            upgradeLabel.text = canUpgrade ? $"Upgrade ${booster.GetCurrentLevelStats().upgradeCost}" : "Max Level";
+            upgradeLabel.text = canUpgrade ? $"Upgrade ${level.upgradeCost}" : "Max Level";
 
-        int sellValue = Mathf.RoundToInt(data.cost * 0.5f);
+        int sellValue = SellValueFor(data, booster.GetCurrentLevel() - 1);
         TMP_Text sellLabel = sellButton.GetComponentInChildren<TMP_Text>();
         if (sellLabel != null) sellLabel.text = $"Sell ${sellValue}";
         sellButton.interactable = true;
         sellButton.onClick.RemoveAllListeners();
         BoosterTower capturedBooster = booster;
-        sellButton.onClick.AddListener(() => SellBooster(capturedBooster, sellValue));
+        sellButton.onClick.AddListener(() => Sell(capturedBooster.gameObject, sellValue));
     }
+
     public void ShowFarm(FarmTower farm)
     {
         currentTower = null;
         currentBooster = null;
+        currentFarm = farm;
         focusContainer.SetActive(false);
         TowerSelectionPanel.Instance.panel.SetActive(false);
         PlacementManager.Instance.DeselectTower();
@@ -137,6 +166,7 @@ public class TowerInfoPanel : MonoBehaviour
             {
                 EconomyManager.Instance.Spend(capturedFarm.GetUpgradeCost());
                 capturedFarm.Upgrade();
+                capturedFarm.GetComponent<TowerScaleFX>()?.PlayUpgrade();
                 ShowFarm(capturedFarm);
             });
 
@@ -144,37 +174,19 @@ public class TowerInfoPanel : MonoBehaviour
         if (upgradeLabel != null)
             upgradeLabel.text = canUpgrade ? $"Upgrade ${farm.GetUpgradeCost()}" : "Max Level";
 
-        int sellValue = Mathf.RoundToInt(data.cost * 0.5f);
+        int sellValue = SellValueFor(data, farm.GetCurrentLevel() - 1);
         TMP_Text sellLabel = sellButton.GetComponentInChildren<TMP_Text>();
         if (sellLabel != null) sellLabel.text = $"Sell ${sellValue}";
         sellButton.interactable = true;
         sellButton.onClick.RemoveAllListeners();
-        sellButton.onClick.AddListener(() => SellFarm(capturedFarm, sellValue));
-    }
-
-    void SellFarm(FarmTower farm, int sellValue)
-    {
-        EconomyManager.Instance.Earn(sellValue);
-        AchievementManager.Instance?.RegisterSell();
-        GameObject farmRoot = farm.gameObject;
-        GridCell[] cells = FindObjectsByType<GridCell>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (GridCell cell in cells)
-        {
-            if (cell.IsOccupiedBy(farmRoot))
-            {
-                cell.FreeCellAndDestroy();
-                break;
-            }
-        }
-
-        // Deselect ya llama Close() internamente
-        farm.GetComponent<TowerClickHandler>().Deselect();
+        sellButton.onClick.AddListener(() => Sell(capturedFarm.gameObject, sellValue));
     }
 
     public void Close()
     {
         currentTower = null;
         currentBooster = null;
+        currentFarm = null;
         focusContainer.SetActive(true);
         panel.SetActive(false);
     }
@@ -187,26 +199,33 @@ public class TowerInfoPanel : MonoBehaviour
 
         towerNameText.text = data.towerName;
 
-        damageText.text = boost != null && boost.damageBonus > 0
+        string dmg = boost != null && boost.damageBonus > 0
             ? $"Damage: {base_.damage:F0} (+{base_.damage * boost.damageBonus:F0})"
             : $"Damage: {base_.damage:F0}";
+        if (base_.critChance > 0f)
+            dmg += $"  |  Crit: {base_.critChance * 100:F0}%";
+        damageText.text = dmg;
 
         attackSpeedText.text = boost != null && boost.attackSpeedBonus > 0
             ? $"Speed: {base_.attackSpeed:F1} (+{base_.attackSpeed * boost.attackSpeedBonus:F1})"
             : $"Speed: {base_.attackSpeed:F1}";
 
-        rangeText.text = boost != null && boost.rangeBonus > 0
+        string rng = boost != null && boost.rangeBonus > 0
             ? $"Range: {base_.range:F1} (+{base_.range * boost.rangeBonus:F1})"
             : $"Range: {base_.range:F1}";
+        if (base_.splashRadius > 0f) rng += $"  |  Splash: {base_.splashRadius:F1}";
+        if (base_.slowAmount > 0f) rng += $"  |  Slow: {base_.slowAmount * 100:F0}%";
+        rangeText.text = rng;
 
         levelText.text = $"Level: {currentTower.GetCurrentLevel()} / {data.levels.Length}";
 
-        int sellValue = Mathf.RoundToInt(data.cost * 0.5f);
+        int sellValue = SellValueFor(data, currentTower.GetCurrentLevel() - 1);
         TMP_Text sellLabel = sellButton.GetComponentInChildren<TMP_Text>();
         if (sellLabel != null) sellLabel.text = $"Sell ${sellValue}";
         sellButton.interactable = true;
         sellButton.onClick.RemoveAllListeners();
-        sellButton.onClick.AddListener(() => SellTower(sellValue));
+        TowerController captured = currentTower;
+        sellButton.onClick.AddListener(() => Sell(captured.gameObject, sellValue));
 
         RefreshButtons();
         RefreshFocus();
@@ -249,7 +268,9 @@ public class TowerInfoPanel : MonoBehaviour
         if (!EconomyManager.Instance.Spend(cost)) return;
 
         currentTower.Upgrade();
-        currentTower.GetComponent<TowerClickHandler>().RefreshRange();
+        currentTower.GetComponent<TowerScaleFX>()?.PlayUpgrade();
+        TowerClickHandler handler = currentTower.GetComponentInChildren<TowerClickHandler>();
+        if (handler != null) handler.RefreshRange();
 
         if (!currentTower.CanUpgrade())
             AchievementManager.Instance?.RegisterMaxOut();
@@ -257,11 +278,15 @@ public class TowerInfoPanel : MonoBehaviour
         RefreshPanel();
     }
 
-    void SellTower(int sellValue)
+    // Venta unificada para los tres tipos de torre (antes habia 3 metodos casi identicos)
+    void Sell(GameObject towerRoot, int sellValue)
     {
         EconomyManager.Instance.Earn(sellValue);
         AchievementManager.Instance?.RegisterSell();
-        GameObject towerRoot = currentTower.gameObject;
+
+        TowerClickHandler handler = towerRoot.GetComponentInChildren<TowerClickHandler>();
+        if (handler != null) handler.Deselect(); // Deselect ya llama Close() internamente
+        else Close();
 
         GridCell[] cells = FindObjectsByType<GridCell>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         foreach (GridCell cell in cells)
@@ -273,27 +298,7 @@ public class TowerInfoPanel : MonoBehaviour
             }
         }
 
-        // Deselect ya llama Close() internamente
-        currentTower.GetComponent<TowerClickHandler>().Deselect();
-    }
-
-    void SellBooster(BoosterTower booster, int sellValue)
-    {
-        EconomyManager.Instance.Earn(sellValue);
-        AchievementManager.Instance?.RegisterSell();
-        GameObject boosterRoot = booster.gameObject;
-
-        GridCell[] cells = FindObjectsByType<GridCell>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (GridCell cell in cells)
-        {
-            if (cell.IsOccupiedBy(boosterRoot))
-            {
-                cell.FreeCellAndDestroy();
-                break;
-            }
-        }
-
-        // Deselect ya llama Close() internamente
-        booster.GetComponent<TowerClickHandler>().Deselect();
+        // La celda vuelve a estar libre: refrescar precios (las farms cambian de coste)
+        TowerSelectionPanel.Instance?.RefreshAllLabels();
     }
 }
