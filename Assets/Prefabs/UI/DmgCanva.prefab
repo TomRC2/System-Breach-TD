@@ -257,6 +257,6 @@ MonoBehaviour:
   riseHeight: 1.5
   normalColor: {r: 1, g: 0, b: 0, a: 1}
   critColor: {r: 0.7330774, g: 0.015686274, b: 1, a: 1}
-  critScaleMin: 0.8
-  critScaleMax: 1.4
+  critScaleMin: 0.01
+  critScaleMax: 0.03
   critPulseSpeed: 8

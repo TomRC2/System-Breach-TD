@@ -187,6 +187,7 @@ MonoBehaviour:
   displayName: 
   healthBar: {fileID: 4449881074054543554}
   damageTextPrefab: {fileID: 2450853535906911369, guid: b19d9a111fac76b41b3c18992cf2ed6b, type: 3}
+  deathShrinkDuration: 0.15
 --- !u!114 &9055860947484726197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,7 +510,7 @@ MonoBehaviour:
   canvas: {fileID: 9155943189091172660}
   slider: {fileID: 5242453091726812434}
   hideDelay: 2
-  offset: {x: 0, y: 0, z: 1}
+  offset: {x: 0, y: 0.375, z: 1}
 --- !u!1 &8126272776128663621
 GameObject:
   m_ObjectHideFlags: 0
