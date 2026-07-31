@@ -83,7 +83,7 @@ public class TowerInfoPanel : MonoBehaviour
         focusNextButton.onClick.AddListener(() => CycleFocus(1));
 
         RefreshPanel();
-        panel.SetActive(true);
+        PanelFX.Show(panel);
     }
 
     public void ShowBooster(BoosterTower booster)
@@ -95,7 +95,7 @@ public class TowerInfoPanel : MonoBehaviour
         currentTower = null;
         currentFarm = null;
         focusContainer.SetActive(false);
-        panel.SetActive(true);
+        PanelFX.Show(panel);
 
         TowerData data = booster.GetData();
         TowerLevel level = booster.GetCurrentLevelStats();
@@ -144,7 +144,7 @@ public class TowerInfoPanel : MonoBehaviour
         TowerSelectionPanel.Instance.panel.SetActive(false);
         PlacementManager.Instance.DeselectTower();
         TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
-        panel.SetActive(true);
+        PanelFX.Show(panel);
 
         TowerData data = farm.GetData();
         TowerLevel level = farm.GetCurrentLevelStats();

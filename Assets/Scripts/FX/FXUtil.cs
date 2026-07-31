@@ -1,8 +1,30 @@
 using UnityEngine;
+using TMPro;
 
 // Utilidades visuales generadas por codigo (sin necesidad de assets nuevos)
 public static class FXUtil
 {
+    // Texto flotante en el mundo (p. ej. "+$25" sobre una farm)
+    public static void SpawnFloatingText(Vector3 position, string text, Color color)
+    {
+        GameObject go = new GameObject("FloatingText");
+        go.transform.position = position;
+        if (Camera.main != null)
+            go.transform.rotation = Camera.main.transform.rotation;
+
+        TextMeshPro tmp = go.AddComponent<TextMeshPro>();
+        tmp.text = text;
+        tmp.fontSize = 4;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.color = color;
+
+        MeshRenderer rend = go.GetComponent<MeshRenderer>();
+        if (rend != null) rend.sortingOrder = 150;
+
+        go.AddComponent<FloatingTextAnim>();
+    }
+
     private static Sprite circleSprite;
     private static Material spriteMat;
 
@@ -59,6 +81,41 @@ public static class FXUtil
         ImpactFlashAnim anim = go.AddComponent<ImpactFlashAnim>();
         anim.size = size;
         anim.duration = duration;
+    }
+}
+
+// Animador del texto flotante: sube y se desvanece
+public class FloatingTextAnim : MonoBehaviour
+{
+    public float duration = 1f;
+    public float riseSpeed = 1.2f;
+
+    private float elapsed;
+    private TextMeshPro tmp;
+    private Vector3 up;
+
+    void Awake()
+    {
+        tmp = GetComponent<TextMeshPro>();
+        // "arriba" en pantalla, sea cual sea la orientacion de la camara
+        up = Camera.main != null ? Camera.main.transform.up : Vector3.up;
+    }
+
+    void Update()
+    {
+        elapsed += Time.deltaTime;
+        float t = elapsed / duration;
+
+        transform.position += up * riseSpeed * Time.deltaTime;
+
+        if (tmp != null)
+        {
+            Color c = tmp.color;
+            c.a = 1f - Mathf.Clamp01((t - 0.4f) / 0.6f);
+            tmp.color = c;
+        }
+
+        if (t >= 1f) Destroy(gameObject);
     }
 }
 

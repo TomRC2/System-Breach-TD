@@ -89,7 +89,8 @@ public class PauseManager : MonoBehaviour
     {
         isPaused = !isPaused;
         hud.SetActive(!isPaused);
-        pausePanel.SetActive(isPaused);
+        if (isPaused) PanelFX.Show(pausePanel);
+        else pausePanel.SetActive(false);
         if (isPaused)
         {
             timeScaleBeforePause = Time.timeScale;

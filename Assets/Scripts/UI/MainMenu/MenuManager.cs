@@ -66,7 +66,7 @@ public class MenuManager : MonoBehaviour
             if (p.activeSelf) panelHistory.Push(p);
 
         CloseAllPanels();
-        panel.SetActive(true);
+        PanelFX.Show(panel);
     }
     public void GoBack()
     {
@@ -78,7 +78,7 @@ public class MenuManager : MonoBehaviour
 
         CloseAllPanels();
         GameObject prev = panelHistory.Pop();
-        prev.SetActive(true);
+        PanelFX.Show(prev);
     }
     public void CloseAllPanels()
     {

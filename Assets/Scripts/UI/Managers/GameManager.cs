@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
         AchievementManager.Instance?.RegisterLevelCompleted();
         if (computerHealth != null && computerHealth.currentHP >= computerHealth.maxHP)
             AchievementManager.Instance?.RegisterNoDamage();
-        victoryPanel.SetActive(true);
+        PanelFX.Show(victoryPanel);
     }
 
     public void GameOver()
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
         if (ScoreManager.Instance != null && gameOverScoreText != null)
             gameOverScoreText.text = $"Puntaje: {ScoreManager.Instance.GetScore()}";
 
-        gameOverPanel.SetActive(true);
+        PanelFX.Show(gameOverPanel);
     }
 
     public void NextLevel()

@@ -26,10 +26,30 @@ public class LevelSelectManager : MonoBehaviour
 
             levelButtons[i].interactable = isUnlocked;
 
-            // Cambiar texto del botón según estado
+            // Cambiar texto del botón según estado (con récord si lo hay)
             TMP_Text label = levelButtons[i].GetComponentInChildren<TMP_Text>();
             if (label != null)
-                label.text = isUnlocked ? $"Level {levelIndex}" : "";
+            {
+                if (!isUnlocked)
+                {
+                    label.text = "";
+                }
+                else
+                {
+                    int highscore = ScoreManager.GetHighscore(levelIndex);
+                    label.text = highscore > 0
+                        ? $"Level {levelIndex}\n<size=55%>Best: {highscore}</size>"
+                        : $"Level {levelIndex}";
+                }
+            }
+
+            // El siguiente nivel por jugar pulsa suavemente para llamar la atención
+            if (isUnlocked && levelIndex == unlocked && levelIndex < TOTAL_LEVELS)
+            {
+                ButtonHoverFX fx = levelButtons[i].GetComponent<ButtonHoverFX>();
+                if (fx == null) fx = levelButtons[i].gameObject.AddComponent<ButtonHoverFX>();
+                fx.idlePulse = true;
+            }
 
             // Asignar listener con closure correcta
             if (isUnlocked)

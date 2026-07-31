@@ -26,6 +26,12 @@ public class FarmTower : MonoBehaviour
     {
         int money = data.levels[currentLevel].moneyPerWave;
         EconomyManager.Instance.Earn(money);
+
+        // feedback visual: "+$X" flotante y destello dorado sobre la farm
+        Vector3 pos = transform.position;
+        if (Camera.main != null) pos -= Camera.main.transform.forward * 1f;
+        FXUtil.SpawnFloatingText(pos, $"+${money}", new Color(1f, 0.85f, 0.3f));
+        FXUtil.SpawnImpactFlash(pos, new Color(1f, 0.85f, 0.3f, 0.5f), 0.6f, 0.25f);
     }
 
     public void Upgrade()

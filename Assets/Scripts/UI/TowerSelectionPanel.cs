@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 using System.Collections.Generic;
 
 public class TowerSelectionPanel : MonoBehaviour
@@ -78,10 +79,14 @@ public class TowerSelectionPanel : MonoBehaviour
         TowerSelectionPanel.Instance.OnTowerPlacedOrCancelled();
         TowerInfoPanel.Instance.Close();
         bool isOpen = !panel.activeSelf;
-        panel.SetActive(isOpen);
 
-        if (!isOpen)
+        if (isOpen)
         {
+            PanelFX.Show(panel);
+        }
+        else
+        {
+            panel.SetActive(false);
             PlacementManager.Instance.DeselectTower();
             HideGrid();
         }
@@ -114,15 +119,74 @@ public class TowerSelectionPanel : MonoBehaviour
         HideGrid();
     }
 
+    private Dictionary<GridCell, Vector3> cellBaseScales = new Dictionary<GridCell, Vector3>();
+
     public void ShowGrid()
     {
+        // centro del grid para expandir la onda desde ahi
+        Vector3 center = Vector3.zero;
+        int count = 0;
         foreach (GridCell cell in allCells)
-            if (!cell.isOccupied) cell.gameObject.SetActive(true);
+        {
+            center += cell.transform.position;
+            count++;
+        }
+        if (count > 0) center /= count;
+
+        // distancia maxima para normalizar los retrasos
+        float maxDist = 0.01f;
+        foreach (GridCell cell in allCells)
+        {
+            float d = Vector3.Distance(cell.transform.position, center);
+            if (d > maxDist) maxDist = d;
+        }
+
+        // onda rapida del centro hacia afuera (~0.1s en total + pop de 0.08s)
+        const float TOTAL_WAVE_TIME = 0.1f;
+        foreach (GridCell cell in allCells)
+        {
+            if (cell.isOccupied) continue;
+
+            if (!cellBaseScales.ContainsKey(cell))
+                cellBaseScales[cell] = cell.transform.localScale;
+
+            float delay = Vector3.Distance(cell.transform.position, center) / maxDist * TOTAL_WAVE_TIME;
+            cell.gameObject.SetActive(true);
+            StartCoroutine(PopCell(cell.transform, cellBaseScales[cell], delay));
+        }
+    }
+
+    // Aparicion en cascada: cada celda hace un pequenio pop con retraso escalonado
+    IEnumerator PopCell(Transform cell, Vector3 baseScale, float delay)
+    {
+        cell.localScale = Vector3.zero;
+        float elapsed = 0f;
+        while (elapsed < delay)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        float duration = 0.08f;
+        elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            cell.localScale = baseScale * (t * t * (3f - 2f * t));
+            yield return null;
+        }
+        cell.localScale = baseScale;
     }
 
     public void HideGrid()
     {
+        StopAllCoroutines();
         foreach (GridCell cell in allCells)
+        {
+            if (cellBaseScales.ContainsKey(cell))
+                cell.transform.localScale = cellBaseScales[cell];
             cell.gameObject.SetActive(false);
+        }
     }
 }

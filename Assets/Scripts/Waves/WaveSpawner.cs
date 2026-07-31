@@ -39,6 +39,7 @@ public class WaveSpawner : MonoBehaviour
         if (currentWave >= waves.Count) yield break;
 
         OnWaveChanged?.Invoke(currentWave + 1, waves.Count);
+        WaveBanner.Show(currentWave + 1, waves.Count);
         spawning = true;
 
         WaveData wave = waves[currentWave];
