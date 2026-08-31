@@ -23,7 +23,7 @@ MonoBehaviour:
     impressive attack speed even further.
   levels:
   - damage: 3
-    attackSpeed: 8
+    attackSpeed: 12
     range: 3
     critChance: 0
     upgradeCost: 300
@@ -35,7 +35,7 @@ MonoBehaviour:
     slowAmount: 0
     slowDuration: 0
   - damage: 5
-    attackSpeed: 13
+    attackSpeed: 15
     range: 4
     critChance: 0.05
     upgradeCost: 700
@@ -47,7 +47,7 @@ MonoBehaviour:
     slowAmount: 0
     slowDuration: 0
   - damage: 8
-    attackSpeed: 19
+    attackSpeed: 20
     range: 5
     critChance: 0.1
     upgradeCost: 1250

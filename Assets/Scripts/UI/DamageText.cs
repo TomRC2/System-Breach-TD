@@ -20,11 +20,15 @@ public class DamageText : MonoBehaviour
 
     private bool isCrit = false;
     private CanvasGroup cg;
+    // Pooling: escala original del prefab (el Canvas viene escalado a 0.01
+    // a proposito para que el texto TMP se vea del tamanio correcto en mundo).
+    private Vector3 baseScale;
 
     void Awake()
     {
         cg = GetComponent<CanvasGroup>();
         if (cg == null) cg = gameObject.AddComponent<CanvasGroup>();
+        baseScale = transform.localScale;
     }
 
     public void Setup(float damage, bool crit, Vector3 worldPosition)
@@ -40,7 +44,7 @@ public class DamageText : MonoBehaviour
         transform.rotation = Camera.main.transform.rotation;
         // Pooling: una instancia reciclada puede llegar con la escala/alpha
         // en el estado en que quedo al terminar su animacion anterior.
-        transform.localScale = Vector3.one;
+        transform.localScale = baseScale;
         cg.alpha = 1f;
         text.text = crit ? $"<b>{Mathf.RoundToInt(damage)}!</b>" : Mathf.RoundToInt(damage).ToString();
         text.color = crit ? critColor : normalColor;
