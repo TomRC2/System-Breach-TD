@@ -22,6 +22,7 @@ public class TowerController : MonoBehaviour
     private float attackCooldown = 0f;
     private float retargetTimer = 0f;
     private const float RETARGET_INTERVAL = 0.1f; // re-elegir objetivo 10 veces/seg en vez de cada frame
+    private const int MAX_SHOTS_PER_FRAME = 10; // limite de seguridad para el catch-up de disparos
     private EnemyHealth currentTarget;
     private TowerLevel cachedStats; // stats efectivas cacheadas (evita alocar cada frame)
 
@@ -108,11 +109,20 @@ public class TowerController : MonoBehaviour
 
         if (currentTarget != null)
             AimAt(currentTarget.transform.position);
+        else
+            attackCooldown = Mathf.Max(attackCooldown, 0f); // sin objetivo: no acumular disparos "en deuda"
 
-        if (attackCooldown <= 0f && currentTarget != null)
+        // Bucle de "catch-up": antes solo se comprobaba una vez por Update, asi que en
+        // frame rates bajos (celular) una torre nunca podia disparar mas rapido que el
+        // frame rate, aunque su attackSpeed configurado fuera mayor (p. ej. Metralleta
+        // nivel 5 = 50 disparos/seg, imposible a 30 fps). Con el bucle, el DPS real
+        // depende del tiempo transcurrido y no del frame rate del dispositivo.
+        int shotsThisFrame = 0;
+        while (attackCooldown <= 0f && currentTarget != null && shotsThisFrame < MAX_SHOTS_PER_FRAME)
         {
             Shoot(currentTarget);
-            attackCooldown = 1f / stats.attackSpeed;
+            attackCooldown += 1f / stats.attackSpeed;
+            shotsThisFrame++;
         }
     }
 
@@ -201,7 +211,9 @@ public class TowerController : MonoBehaviour
         bool isCrit = Random.value < stats.critChance;
         float damage = isCrit ? stats.damage * data.critMultiplier : stats.damage;
 
-        GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+        GameObject proj = ObjectPooler.Instance != null
+            ? ObjectPooler.Instance.Get(projectilePrefab, firePoint.position, Quaternion.identity)
+            : Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         proj.GetComponent<Projectile>().Initialize(
             target, damage, isCrit, stats.splashRadius, stats.slowAmount, stats.slowDuration);
 

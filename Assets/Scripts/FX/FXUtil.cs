@@ -4,6 +4,20 @@ using TMPro;
 // Utilidades visuales generadas por codigo (sin necesidad de assets nuevos)
 public static class FXUtil
 {
+    private static TMP_FontAsset pixelFont;
+
+    // Fuente retro pixel-art usada en los textos de UI generados por codigo
+    // (banner de oleada, texto flotante de dinero). Se carga una sola vez.
+    public static TMP_FontAsset PixelFont
+    {
+        get
+        {
+            if (pixelFont == null)
+                pixelFont = Resources.Load<TMP_FontAsset>("Fonts & Materials/PressStart2P SDF");
+            return pixelFont;
+        }
+    }
+
     // Texto flotante en el mundo (p. ej. "+$25" sobre una farm)
     public static void SpawnFloatingText(Vector3 position, string text, Color color)
     {
@@ -18,6 +32,7 @@ public static class FXUtil
         tmp.fontStyle = FontStyles.Bold;
         tmp.alignment = TextAlignmentOptions.Center;
         tmp.color = color;
+        if (PixelFont != null) tmp.font = PixelFont;
 
         MeshRenderer rend = go.GetComponent<MeshRenderer>();
         if (rend != null) rend.sortingOrder = 150;
@@ -65,20 +80,46 @@ public static class FXUtil
         return circleSprite;
     }
 
+    private static GameObject flashTemplate;
+
+    // Molde inactivo usado como "prefab" para poolear los destellos de impacto
+    // (se disparan tan seguido como los impactos de proyectil, asi que sin pool
+    // generan tanta basura de GC como los proyectiles/enemigos). Se cuelga del
+    // ObjectPooler (DontDestroyOnLoad) para sobrevivir a los cambios de escena.
+    private static GameObject GetFlashTemplate()
+    {
+        if (flashTemplate != null) return flashTemplate;
+
+        flashTemplate = new GameObject("ImpactFlash_Template");
+        flashTemplate.AddComponent<SpriteRenderer>();
+        flashTemplate.AddComponent<ImpactFlashAnim>();
+        flashTemplate.SetActive(false);
+
+        if (ObjectPooler.Instance != null)
+            flashTemplate.transform.SetParent(ObjectPooler.Instance.transform, false);
+        else
+            Object.DontDestroyOnLoad(flashTemplate);
+
+        return flashTemplate;
+    }
+
     // Destello circular que crece y se desvanece (para impactos)
     public static void SpawnImpactFlash(Vector3 position, Color color, float size = 0.5f, float duration = 0.15f)
     {
-        GameObject go = new GameObject("ImpactFlash");
-        go.transform.position = position;
-        if (Camera.main != null)
-            go.transform.rotation = Camera.main.transform.rotation;
+        Quaternion rot = Camera.main != null ? Camera.main.transform.rotation : Quaternion.identity;
+        GameObject template = GetFlashTemplate();
 
-        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+        GameObject go = ObjectPooler.Instance != null
+            ? ObjectPooler.Instance.Get(template, position, rot)
+            : Object.Instantiate(template, position, rot);
+        go.SetActive(true); // el molde nace inactivo; una instancia recien creada hereda ese estado
+
+        SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
         sr.sprite = GetCircleSprite();
         sr.color = color;
         sr.sortingOrder = 100;
 
-        ImpactFlashAnim anim = go.AddComponent<ImpactFlashAnim>();
+        ImpactFlashAnim anim = go.GetComponent<ImpactFlashAnim>();
         anim.size = size;
         anim.duration = duration;
     }
@@ -130,6 +171,9 @@ public class ImpactFlashAnim : MonoBehaviour
 
     void Awake() => sr = GetComponent<SpriteRenderer>();
 
+    // Pooling: reiniciar el cronometro cada vez que se reactiva una instancia reciclada
+    void OnEnable() => elapsed = 0f;
+
     void Update()
     {
         elapsed += Time.deltaTime;
@@ -143,6 +187,15 @@ public class ImpactFlashAnim : MonoBehaviour
             sr.color = c;
         }
 
-        if (t >= 1f) Destroy(gameObject);
+        if (t >= 1f) Release();
+    }
+
+    // Vuelve al pool si vino de ObjectPooler.Get(); si no, se destruye normalmente.
+    void Release()
+    {
+        if (ObjectPooler.Instance != null)
+            ObjectPooler.Instance.Release(gameObject);
+        else
+            Destroy(gameObject);
     }
 }

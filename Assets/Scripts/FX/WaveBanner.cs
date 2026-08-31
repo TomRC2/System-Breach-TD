@@ -21,6 +21,7 @@ public static class WaveBanner
         GameObject textGo = new GameObject("Text");
         textGo.transform.SetParent(go.transform, false);
         TextMeshProUGUI text = textGo.AddComponent<TextMeshProUGUI>();
+        if (FXUtil.PixelFont != null) text.font = FXUtil.PixelFont;
         text.text = $"WAVE {current} / {total}";
         text.fontSize = 90;
         text.fontStyle = FontStyles.Bold;

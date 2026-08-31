@@ -23,7 +23,7 @@ MonoBehaviour:
     impressive attack speed even further.
   levels:
   - damage: 3
-    attackSpeed: 15
+    attackSpeed: 8
     range: 3
     critChance: 0
     upgradeCost: 300
@@ -31,8 +31,11 @@ MonoBehaviour:
     damageBonus: 0
     rangeBonus: 0
     moneyPerWave: 0
+    splashRadius: 0
+    slowAmount: 0
+    slowDuration: 0
   - damage: 5
-    attackSpeed: 20
+    attackSpeed: 13
     range: 4
     critChance: 0.05
     upgradeCost: 700
@@ -40,8 +43,11 @@ MonoBehaviour:
     damageBonus: 0
     rangeBonus: 0
     moneyPerWave: 0
+    splashRadius: 0
+    slowAmount: 0
+    slowDuration: 0
   - damage: 8
-    attackSpeed: 25
+    attackSpeed: 19
     range: 5
     critChance: 0.1
     upgradeCost: 1250
@@ -49,8 +55,11 @@ MonoBehaviour:
     damageBonus: 0
     rangeBonus: 0
     moneyPerWave: 0
+    splashRadius: 0
+    slowAmount: 0
+    slowDuration: 0
   - damage: 12
-    attackSpeed: 30
+    attackSpeed: 25
     range: 6
     critChance: 0.2
     upgradeCost: 2000
@@ -58,8 +67,11 @@ MonoBehaviour:
     damageBonus: 0
     rangeBonus: 0
     moneyPerWave: 0
+    splashRadius: 0
+    slowAmount: 0
+    slowDuration: 0
   - damage: 15
-    attackSpeed: 50
+    attackSpeed: 35
     range: 7
     critChance: 0.3
     upgradeCost: 0
@@ -67,3 +79,6 @@ MonoBehaviour:
     damageBonus: 0
     rangeBonus: 0
     moneyPerWave: 0
+    splashRadius: 0
+    slowAmount: 0
+    slowDuration: 0

@@ -19,6 +19,15 @@ public class EnemyMovement : MonoBehaviour
         waypoints = points;
     }
 
+    // Pooling: vuelve el enemigo reciclado al principio del camino, sin ralentizacion
+    // arrastrada de su vida anterior.
+    public void ResetForReuse()
+    {
+        currentWaypoint = 0;
+        slowMultiplier = 1f;
+        slowTimer = 0f;
+    }
+
     // amount: fraccion de reduccion (0.3 = 30% mas lento). Se queda el slow mas fuerte.
     public void ApplySlow(float amount, float duration)
     {

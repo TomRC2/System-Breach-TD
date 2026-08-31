@@ -27,6 +27,12 @@ public class EnemyVisualFX : MonoBehaviour
         flashTimer = duration;
     }
 
+    // Pooling: corta un flash que haya quedado a mitad de camino al reciclar el objeto
+    public void ResetVisual()
+    {
+        flashTimer = 0f;
+    }
+
     void LateUpdate()
     {
         bool flashing = flashTimer > 0f;
