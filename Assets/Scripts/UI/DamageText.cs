@@ -19,18 +19,33 @@ public class DamageText : MonoBehaviour
     public float critPulseSpeed = 8f;
 
     private bool isCrit = false;
+    private CanvasGroup cg;
+    // Pooling: escala original del prefab (el Canvas viene escalado a 0.01
+    // a proposito para que el texto TMP se vea del tamanio correcto en mundo).
+    private Vector3 baseScale;
+
+    void Awake()
+    {
+        cg = GetComponent<CanvasGroup>();
+        if (cg == null) cg = gameObject.AddComponent<CanvasGroup>();
+        baseScale = transform.localScale;
+    }
 
     public void Setup(float damage, bool crit, Vector3 worldPosition)
     {
         if (!OptionsManager.IsDamageTextEnabled())
         {
-            Destroy(gameObject);
+            Release();
             return;
         }
 
         isCrit = crit;
         transform.position = worldPosition;
         transform.rotation = Camera.main.transform.rotation;
+        // Pooling: una instancia reciclada puede llegar con la escala/alpha
+        // en el estado en que quedo al terminar su animacion anterior.
+        transform.localScale = baseScale;
+        cg.alpha = 1f;
         text.text = crit ? $"<b>{Mathf.RoundToInt(damage)}!</b>" : Mathf.RoundToInt(damage).ToString();
         text.color = crit ? critColor : normalColor;
 
@@ -41,8 +56,6 @@ public class DamageText : MonoBehaviour
     {
         float elapsed = 0f;
         Vector3 startPos = transform.position;
-        CanvasGroup cg = GetComponent<CanvasGroup>();
-        if (cg == null) cg = gameObject.AddComponent<CanvasGroup>();
 
         while (elapsed < duration)
         {
@@ -64,6 +77,16 @@ public class DamageText : MonoBehaviour
             yield return null;
         }
 
-        Destroy(gameObject);
+        Release();
+    }
+
+    // Vuelve al pool si vino de ObjectPooler.Get(); si no, se destruye normalmente
+    // (compatibilidad con instancias creadas a mano / en tests).
+    void Release()
+    {
+        if (ObjectPooler.Instance != null)
+            ObjectPooler.Instance.Release(gameObject);
+        else
+            Destroy(gameObject);
     }
 }

@@ -33,10 +33,16 @@ public class EnemyHealth : MonoBehaviour
 
     private float damageTextHeight = 0.5f;
 
+    // Pooling: escala original del prefab, para restaurarla despues del
+    // encogimiento de la animacion de muerte cuando el objeto se recicla.
+    private Vector3 baseScale;
+
     void Awake()
     {
         // Feedback visual (flash al recibir danio, tinte al estar ralentizado)
         visualFX = gameObject.AddComponent<EnemyVisualFX>();
+
+        baseScale = transform.localScale;
 
         // Altura del texto de danio segun el tamanio real del sprite,
         // para que no quede tapado en enemigos grandes (p. ej. el Tank)
@@ -69,6 +75,35 @@ public class EnemyHealth : MonoBehaviour
     public void Initialize()
     {
         currentHP = maxHP;
+        isDead = false;
+
+        // Pooling: sacarse de encima los suscriptores del ciclo de vida anterior
+        // antes de que el WaveSpawner se vuelva a suscribir a este mismo enemigo
+        // reciclado (si no, un enemigo reusado dispara el callback de muerte
+        // varias veces, una por cada vida anterior que tuvo).
+        OnDeath = null;
+        OnReach = null;
+
+        // Deshacer lo que DeathEffect() dejo apagado/encogido la vez anterior
+        transform.localScale = baseScale;
+
+        EnemyMovement mv = GetComponent<EnemyMovement>();
+        if (mv != null)
+        {
+            mv.enabled = true;
+            mv.ResetForReuse();
+        }
+
+        foreach (Collider col in GetComponentsInChildren<Collider>())
+            col.enabled = true;
+
+        visualFX?.ResetVisual();
+
+        if (healthBar != null)
+        {
+            healthBar.gameObject.SetActive(true);
+            healthBar.Setup(transform, maxHP);
+        }
     }
 
     public bool IsDead() => isDead;
@@ -87,7 +122,9 @@ public class EnemyHealth : MonoBehaviour
         if (damageTextPrefab != null && OptionsManager.IsDamageTextEnabled())
         {
             Vector3 pos = transform.position + Vector3.up * damageTextHeight;
-            GameObject go = Instantiate(damageTextPrefab, pos, Quaternion.identity);
+            GameObject go = ObjectPooler.Instance != null
+                ? ObjectPooler.Instance.Get(damageTextPrefab, pos, Quaternion.identity)
+                : Instantiate(damageTextPrefab, pos, Quaternion.identity);
             go.GetComponent<DamageText>().Setup(amount, isCrit, pos);
         }
 
@@ -145,7 +182,7 @@ public class EnemyHealth : MonoBehaviour
             yield return null;
         }
 
-        Destroy(gameObject);
+        Release();
     }
 
     public void ReachComputer()
@@ -160,6 +197,16 @@ public class EnemyHealth : MonoBehaviour
             cachedComputer.TakeDamage(maxHP);
 
         OnReach?.Invoke();
-        Destroy(gameObject);
+        Release();
+    }
+
+    // Vuelve al pool si el objeto vino de ObjectPooler.Get(); si no, se destruye
+    // normalmente (por compatibilidad con instancias creadas a mano / en tests).
+    void Release()
+    {
+        if (ObjectPooler.Instance != null)
+            ObjectPooler.Instance.Release(gameObject);
+        else
+            Destroy(gameObject);
     }
 }

@@ -18,29 +18,47 @@ public class Projectile : MonoBehaviour
     private float lifetime = 0f;
     private Color fxColor = new Color(0.4f, 0.9f, 1f);
 
-    void Start()
-    {
-        // Tomar el color del proyectil para la estela y el destello
-        SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
-        if (sr != null) fxColor = sr.color;
-        else
-        {
-            Renderer rend = GetComponentInChildren<Renderer>();
-            if (rend != null && rend.sharedMaterial != null && rend.sharedMaterial.HasProperty("_BaseColor"))
-                fxColor = rend.sharedMaterial.GetColor("_BaseColor");
-        }
+    // Pooling: la config visual (color, TrailRenderer) solo se arma una vez por
+    // instancia; en reactivaciones posteriores (objeto reciclado) solo se limpia
+    // el rastro para que no arrastre la posicion del disparo anterior.
+    private bool visualsReady = false;
+    private TrailRenderer trail;
 
-        // Estela generada por codigo (si el prefab no trae una propia)
-        if (GetComponentInChildren<TrailRenderer>() == null)
+    void OnEnable()
+    {
+        lifetime = 0f;
+
+        if (!visualsReady)
         {
-            TrailRenderer trail = gameObject.AddComponent<TrailRenderer>();
-            trail.time = 0.15f;
-            trail.startWidth = 0.12f;
-            trail.endWidth = 0f;
-            trail.material = FXUtil.SharedSpriteMaterial;
+            visualsReady = true;
+
+            // Tomar el color del proyectil para la estela y el destello
+            SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
+            if (sr != null) fxColor = sr.color;
+            else
+            {
+                Renderer rend = GetComponentInChildren<Renderer>();
+                if (rend != null && rend.sharedMaterial != null && rend.sharedMaterial.HasProperty("_BaseColor"))
+                    fxColor = rend.sharedMaterial.GetColor("_BaseColor");
+            }
+
+            // Estela generada por codigo (si el prefab no trae una propia)
+            trail = GetComponentInChildren<TrailRenderer>();
+            if (trail == null)
+            {
+                trail = gameObject.AddComponent<TrailRenderer>();
+                trail.time = 0.15f;
+                trail.startWidth = 0.12f;
+                trail.endWidth = 0f;
+                trail.material = FXUtil.SharedSpriteMaterial;
+            }
             trail.startColor = fxColor;
             Color end = fxColor; end.a = 0f;
             trail.endColor = end;
+        }
+        else if (trail != null)
+        {
+            trail.Clear(); // evita que el trail dibuje una linea desde la posicion anterior
         }
     }
 
@@ -67,7 +85,7 @@ public class Projectile : MonoBehaviour
         lifetime += Time.deltaTime;
         if (target == null || lifetime > maxLifetime)
         {
-            Destroy(gameObject);
+            Release();
             return;
         }
 
@@ -112,7 +130,18 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        Destroy(gameObject);
+        Release();
+    }
+
+    // Vuelve al pool si el objeto vino de ObjectPooler.Get(); si no, se destruye
+    // normalmente (por compatibilidad con instancias creadas a mano / en tests).
+    void Release()
+    {
+        target = null;
+        if (ObjectPooler.Instance != null)
+            ObjectPooler.Instance.Release(gameObject);
+        else
+            Destroy(gameObject);
     }
 
     void ApplySlow(EnemyHealth enemy)

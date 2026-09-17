@@ -35,6 +35,13 @@ public class AudioManager : MonoBehaviour
 
             LoadVolumes();
 
+            // En Android/iOS, Unity limita el frame rate a 30 fps por defecto si no se
+            // especifica lo contrario, mientras que en PC corre sin tope (vSyncCount = 0).
+            // Eso hacia que las torres de ataque rapido (limitadas a 1 disparo por frame
+            // en TowerController) tuvieran menos DPS real en celular que en PC.
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 60;
+
         }
         else
         {

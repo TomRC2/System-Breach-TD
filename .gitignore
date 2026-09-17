@@ -67,6 +67,10 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Carpeta de codigo intermedio C++ que genera IL2CPP al lado del build
+# (el nombre lo pone Unity solo, literalmente dice que no hay que shipearla)
+*_BackUpThisFolder_ButDontShipItWithYourGame/
+
 # Packed Addressables
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 

@@ -89,7 +89,9 @@ public class WaveSpawner : MonoBehaviour
 
     void SpawnEnemy(EnemyData data)
     {
-        GameObject obj = Instantiate(data.prefab, waypoints[0].position, Quaternion.identity);
+        GameObject obj = ObjectPooler.Instance != null
+            ? ObjectPooler.Instance.Get(data.prefab, waypoints[0].position, Quaternion.identity)
+            : Instantiate(data.prefab, waypoints[0].position, Quaternion.identity);
 
         EnemyMovement movement = obj.GetComponent<EnemyMovement>();
         movement.SetWaypoints(waypoints);
