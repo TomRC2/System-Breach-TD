@@ -134,7 +134,7 @@ public class GalleryManager : MonoBehaviour
             if (data == null) continue;
             GameObject go = Instantiate(listButtonPrefab, towerListContent);
             TMP_Text label = go.GetComponentInChildren<TMP_Text>();
-            if (label != null) label.text = data.towerName;
+            if (label != null) label.text = LocalizationManager.Tr(data.towerName);
 
             Button btn = go.GetComponent<Button>();
             TowerData captured = data;
@@ -159,7 +159,7 @@ public class GalleryManager : MonoBehaviour
             bool discovered = PlayerPrefs.GetInt($"enemy_discovered_{data.enemyName}", 0) == 1;
 
             TMP_Text label = go.GetComponentInChildren<TMP_Text>();
-            if (label != null) label.text = discovered ? data.enemyName : "???";
+            if (label != null) label.text = discovered ? LocalizationManager.Tr(data.enemyName) : "???";
 
             Button btn = go.GetComponent<Button>();
             EnemyData captured = data;
@@ -200,31 +200,31 @@ public class GalleryManager : MonoBehaviour
     {
         if (currentTowerData == null) return;
         TowerLevel lvl = currentTowerData.levels[currentTowerLevel];
-        levelText.text = $"Level {currentTowerLevel + 1} / {currentTowerData.levels.Length}";
+        levelText.text = string.Format(LocalizationManager.Tr("Level {0} / {1}"), currentTowerLevel + 1, currentTowerData.levels.Length);
 
         prevLevelButton.interactable = currentTowerLevel > 0;
         nextLevelButton.interactable = currentTowerLevel < currentTowerData.levels.Length - 1;
 
         if (currentTowerData.towerType == TowerType.Attack)
         {
-            if (hpText != null) hpText.text = $"Range: {lvl.range:F1}";
-            if (damageText != null) damageText.text = $"Dmg: {lvl.damage:F0}";
-            if (speedText != null) speedText.text = $"Fire rate: {lvl.attackSpeed:F1}/s";
+            if (hpText != null) hpText.text = string.Format(LocalizationManager.Tr("Range: {0}"), lvl.range.ToString("F1"));
+            if (damageText != null) damageText.text = string.Format(LocalizationManager.Tr("Dmg: {0}"), lvl.damage.ToString("F0"));
+            if (speedText != null) speedText.text = string.Format(LocalizationManager.Tr("Fire rate: {0}/s"), lvl.attackSpeed.ToString("F1"));
         }
         else if (currentTowerData.towerType == TowerType.Booster)
         {
-            if (hpText != null) hpText.text = $"Range: {lvl.range:F1}";
-            if (damageText != null) damageText.text = $"Bonus dmg: +{lvl.damageBonus * 100:F0}%";
-            if (speedText != null) speedText.text = $"Bonus firerate: +{lvl.attackSpeedBonus * 100:F0}%";
+            if (hpText != null) hpText.text = string.Format(LocalizationManager.Tr("Range: {0}"), lvl.range.ToString("F1"));
+            if (damageText != null) damageText.text = string.Format(LocalizationManager.Tr("Bonus dmg: +{0}%"), (lvl.damageBonus * 100).ToString("F0"));
+            if (speedText != null) speedText.text = string.Format(LocalizationManager.Tr("Bonus firerate: +{0}%"), (lvl.attackSpeedBonus * 100).ToString("F0"));
         }
         else if (currentTowerData.towerType == TowerType.Farm)
         {
             if (hpText != null) hpText.text = "-";
             if (damageText != null) damageText.text = "-";
-            if (speedText != null) speedText.text = $"Money/Wave: ${lvl.moneyPerWave}";
+            if (speedText != null) speedText.text = string.Format(LocalizationManager.Tr("Money/Wave: ${0}"), lvl.moneyPerWave);
         }
-        if (descriptionText != null) descriptionText.text = currentTowerData.description;
-        if (nameText != null) nameText.text = currentTowerData.name;
+        if (descriptionText != null) descriptionText.text = LocalizationManager.Tr(currentTowerData.description);
+        if (nameText != null) nameText.text = LocalizationManager.Tr(currentTowerData.towerName);
     }
 
     void ChangeTowerLevel(int direction)
@@ -257,11 +257,11 @@ public class GalleryManager : MonoBehaviour
         enemyImage.sprite = data.sprite;
         enemyImage.color = discovered ? Color.white : Color.black;
 
-        if (nameText != null) nameText.text = discovered ? data.enemyName : "???";
-        if (hpText != null) hpText.text = discovered ? $"Vida: {data.hp:F0}" : "?";
-        if (damageText != null) damageText.text = discovered ? $"Daño al núcleo: {data.hp:F0}" : "?";
-        if (speedText != null) speedText.text = discovered ? $"Velocidad: {data.speed:F1}" : "?";
-        if (descriptionText != null) descriptionText.text = discovered ? data.description : "???";
+        if (nameText != null) nameText.text = discovered ? LocalizationManager.Tr(data.enemyName) : "???";
+        if (hpText != null) hpText.text = discovered ? string.Format(LocalizationManager.Tr("HP: {0}"), data.hp.ToString("F0")) : "?";
+        if (damageText != null) damageText.text = discovered ? string.Format(LocalizationManager.Tr("Core Damage: {0}"), data.hp.ToString("F0")) : "?";
+        if (speedText != null) speedText.text = discovered ? string.Format(LocalizationManager.Tr("Speed: {0}"), data.speed.ToString("F1")) : "?";
+        if (descriptionText != null) descriptionText.text = discovered ? LocalizationManager.Tr(data.description) : "???";
     }
 
     // Configura la vista ampliada segun lo seleccionado:

@@ -277,6 +277,7 @@ GameObject:
   - component: {fileID: 7519114691345402752}
   - component: {fileID: 5717191429870483836}
   - component: {fileID: 2322359071501434505}
+  - component: {fileID: 404454044795376460}
   m_Layer: 5
   m_Name: DefeatText
   m_TagString: Untagged
@@ -403,6 +404,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &404454044795376460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3645323844055969633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc0bae9364b8b844197b7bf62815d7e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: "DEFEAT"
 --- !u!1 &4471519052145025003
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,6 +465,7 @@ GameObject:
   - component: {fileID: 2219332375484977663}
   - component: {fileID: 2154816439774110056}
   - component: {fileID: 6586354561427119529}
+  - component: {fileID: 248752558802004714}
   m_Layer: 5
   m_Name: RestartText
   m_TagString: Untagged
@@ -577,6 +592,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &248752558802004714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842846083512009300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc0bae9364b8b844197b7bf62815d7e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: "Restart"
 --- !u!1 &6313175924554825452
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,6 +616,7 @@ GameObject:
   - component: {fileID: 8115526117770317413}
   - component: {fileID: 2843627410278766092}
   - component: {fileID: 5677770044854238108}
+  - component: {fileID: 466241270061191952}
   m_Layer: 5
   m_Name: MainMenuText
   m_TagString: Untagged
@@ -714,6 +743,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &466241270061191952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6313175924554825452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc0bae9364b8b844197b7bf62815d7e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: "MainMenu"
 --- !u!1 &7045146853657504232
 GameObject:
   m_ObjectHideFlags: 0

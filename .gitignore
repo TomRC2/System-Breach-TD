@@ -71,6 +71,9 @@ crashlytics-build.properties
 # (el nombre lo pone Unity solo, literalmente dice que no hay que shipearla)
 *_BackUpThisFolder_ButDontShipItWithYourGame/
 
+# Mapeo de simbolos IL2CPP para resolver stack traces de crash reports
+*_mapping.txt
+
 # Packed Addressables
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 

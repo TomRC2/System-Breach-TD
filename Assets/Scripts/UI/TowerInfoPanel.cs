@@ -100,11 +100,11 @@ public class TowerInfoPanel : MonoBehaviour
         TowerData data = booster.GetData();
         TowerLevel level = booster.GetCurrentLevelStats();
 
-        towerNameText.text = data.towerName;
-        damageText.text = level.damageBonus > 0 ? $"Damage bonus: +{level.damageBonus * 100:F0}%" : "Damage bonus: -";
-        attackSpeedText.text = level.attackSpeedBonus > 0 ? $"Speed bonus: +{level.attackSpeedBonus * 100:F0}%" : "Speed bonus: -";
-        rangeText.text = level.rangeBonus > 0 ? $"Range bonus: +{level.rangeBonus * 100:F0}%" : "Range bonus: -";
-        levelText.text = $"Level: {booster.GetCurrentLevel()} / {data.levels.Length}";
+        towerNameText.text = LocalizationManager.Tr(data.towerName);
+        damageText.text = level.damageBonus > 0 ? string.Format(LocalizationManager.Tr("Damage bonus: +{0}%"), (level.damageBonus * 100).ToString("F0")) : LocalizationManager.Tr("Damage bonus: -");
+        attackSpeedText.text = level.attackSpeedBonus > 0 ? string.Format(LocalizationManager.Tr("Speed bonus: +{0}%"), (level.attackSpeedBonus * 100).ToString("F0")) : LocalizationManager.Tr("Speed bonus: -");
+        rangeText.text = level.rangeBonus > 0 ? string.Format(LocalizationManager.Tr("Range bonus: +{0}%"), (level.rangeBonus * 100).ToString("F0")) : LocalizationManager.Tr("Range bonus: -");
+        levelText.text = string.Format(LocalizationManager.Tr("Level: {0} / {1}"), booster.GetCurrentLevel(), data.levels.Length);
 
         bool canUpgrade = booster.GetCurrentLevel() < data.levels.Length;
         bool canAfford = EconomyManager.Instance.CanAfford(level.upgradeCost);
@@ -124,11 +124,11 @@ public class TowerInfoPanel : MonoBehaviour
 
         TMP_Text upgradeLabel = upgradeButton.GetComponentInChildren<TMP_Text>();
         if (upgradeLabel != null)
-            upgradeLabel.text = canUpgrade ? $"Upgrade ${level.upgradeCost}" : "Max Level";
+            upgradeLabel.text = canUpgrade ? string.Format(LocalizationManager.Tr("Upgrade ${0}"), level.upgradeCost) : LocalizationManager.Tr("Max Level");
 
         int sellValue = SellValueFor(data, booster.GetCurrentLevel() - 1);
         TMP_Text sellLabel = sellButton.GetComponentInChildren<TMP_Text>();
-        if (sellLabel != null) sellLabel.text = $"Sell ${sellValue}";
+        if (sellLabel != null) sellLabel.text = string.Format(LocalizationManager.Tr("Sell ${0}"), sellValue);
         sellButton.interactable = true;
         sellButton.onClick.RemoveAllListeners();
         BoosterTower capturedBooster = booster;
@@ -149,11 +149,11 @@ public class TowerInfoPanel : MonoBehaviour
         TowerData data = farm.GetData();
         TowerLevel level = farm.GetCurrentLevelStats();
 
-        towerNameText.text = data.towerName;
-        damageText.text = $"Money/Wave: ${level.moneyPerWave}";
+        towerNameText.text = LocalizationManager.Tr(data.towerName);
+        damageText.text = string.Format(LocalizationManager.Tr("Money/Wave: ${0}"), level.moneyPerWave);
         attackSpeedText.text = "-";
         rangeText.text = "-";
-        levelText.text = $"Level: {farm.GetCurrentLevel()} / {data.levels.Length}";
+        levelText.text = string.Format(LocalizationManager.Tr("Level: {0} / {1}"), farm.GetCurrentLevel(), data.levels.Length);
 
         bool canUpgrade = farm.CanUpgrade();
         bool canAfford = EconomyManager.Instance.CanAfford(farm.GetUpgradeCost());
@@ -172,11 +172,11 @@ public class TowerInfoPanel : MonoBehaviour
 
         TMP_Text upgradeLabel = upgradeButton.GetComponentInChildren<TMP_Text>();
         if (upgradeLabel != null)
-            upgradeLabel.text = canUpgrade ? $"Upgrade ${farm.GetUpgradeCost()}" : "Max Level";
+            upgradeLabel.text = canUpgrade ? string.Format(LocalizationManager.Tr("Upgrade ${0}"), farm.GetUpgradeCost()) : LocalizationManager.Tr("Max Level");
 
         int sellValue = SellValueFor(data, farm.GetCurrentLevel() - 1);
         TMP_Text sellLabel = sellButton.GetComponentInChildren<TMP_Text>();
-        if (sellLabel != null) sellLabel.text = $"Sell ${sellValue}";
+        if (sellLabel != null) sellLabel.text = string.Format(LocalizationManager.Tr("Sell ${0}"), sellValue);
         sellButton.interactable = true;
         sellButton.onClick.RemoveAllListeners();
         sellButton.onClick.AddListener(() => Sell(capturedFarm.gameObject, sellValue));
@@ -197,31 +197,31 @@ public class TowerInfoPanel : MonoBehaviour
         TowerLevel base_ = currentTower.GetCurrentStats();
         TowerLevel boost = currentTower.GetActiveBoost();
 
-        towerNameText.text = data.towerName;
+        towerNameText.text = LocalizationManager.Tr(data.towerName);
 
         string dmg = boost != null && boost.damageBonus > 0
-            ? $"Damage: {base_.damage:F0} (+{base_.damage * boost.damageBonus:F0})"
-            : $"Damage: {base_.damage:F0}";
+            ? string.Format(LocalizationManager.Tr("Damage: {0} (+{1})"), base_.damage.ToString("F0"), (base_.damage * boost.damageBonus).ToString("F0"))
+            : string.Format(LocalizationManager.Tr("Damage: {0}"), base_.damage.ToString("F0"));
         if (base_.critChance > 0f)
-            dmg += $"  |  Crit: {base_.critChance * 100:F0}%";
+            dmg += string.Format(LocalizationManager.Tr("  |  Crit: {0}%"), (base_.critChance * 100).ToString("F0"));
         damageText.text = dmg;
 
         attackSpeedText.text = boost != null && boost.attackSpeedBonus > 0
-            ? $"Speed: {base_.attackSpeed:F1} (+{base_.attackSpeed * boost.attackSpeedBonus:F1})"
-            : $"Speed: {base_.attackSpeed:F1}";
+            ? string.Format(LocalizationManager.Tr("Speed: {0} (+{1})"), base_.attackSpeed.ToString("F1"), (base_.attackSpeed * boost.attackSpeedBonus).ToString("F1"))
+            : string.Format(LocalizationManager.Tr("Speed: {0}"), base_.attackSpeed.ToString("F1"));
 
         string rng = boost != null && boost.rangeBonus > 0
-            ? $"Range: {base_.range:F1} (+{base_.range * boost.rangeBonus:F1})"
-            : $"Range: {base_.range:F1}";
-        if (base_.splashRadius > 0f) rng += $"  |  Splash: {base_.splashRadius:F1}";
-        if (base_.slowAmount > 0f) rng += $"  |  Slow: {base_.slowAmount * 100:F0}%";
+            ? string.Format(LocalizationManager.Tr("Range: {0} (+{1})"), base_.range.ToString("F1"), (base_.range * boost.rangeBonus).ToString("F1"))
+            : string.Format(LocalizationManager.Tr("Range: {0}"), base_.range.ToString("F1"));
+        if (base_.splashRadius > 0f) rng += string.Format(LocalizationManager.Tr("  |  Splash: {0}"), base_.splashRadius.ToString("F1"));
+        if (base_.slowAmount > 0f) rng += string.Format(LocalizationManager.Tr("  |  Slow: {0}%"), (base_.slowAmount * 100).ToString("F0"));
         rangeText.text = rng;
 
-        levelText.text = $"Level: {currentTower.GetCurrentLevel()} / {data.levels.Length}";
+        levelText.text = string.Format(LocalizationManager.Tr("Level: {0} / {1}"), currentTower.GetCurrentLevel(), data.levels.Length);
 
         int sellValue = SellValueFor(data, currentTower.GetCurrentLevel() - 1);
         TMP_Text sellLabel = sellButton.GetComponentInChildren<TMP_Text>();
-        if (sellLabel != null) sellLabel.text = $"Sell ${sellValue}";
+        if (sellLabel != null) sellLabel.text = string.Format(LocalizationManager.Tr("Sell ${0}"), sellValue);
         sellButton.interactable = true;
         sellButton.onClick.RemoveAllListeners();
         TowerController captured = currentTower;
@@ -241,7 +241,7 @@ public class TowerInfoPanel : MonoBehaviour
 
         TMP_Text upgradeLabel = upgradeButton.GetComponentInChildren<TMP_Text>();
         if (upgradeLabel != null)
-            upgradeLabel.text = canUpgrade ? $"Upgrade ${upgradeCost}" : "Max Level";
+            upgradeLabel.text = canUpgrade ? string.Format(LocalizationManager.Tr("Upgrade ${0}"), upgradeCost) : LocalizationManager.Tr("Max Level");
 
         upgradeButton.interactable = canUpgrade && canAfford;
         upgradeButton.onClick.RemoveAllListeners();
@@ -254,12 +254,12 @@ public class TowerInfoPanel : MonoBehaviour
         int total = System.Enum.GetValues(typeof(FocusMode)).Length;
         int current = (int)currentTower.focusMode;
         currentTower.focusMode = (FocusMode)((current + direction + total) % total);
-        focusModeText.text = currentTower.focusMode.ToString();
+        focusModeText.text = LocalizationManager.Tr(currentTower.focusMode.ToString());
     }
 
     void RefreshFocus()
     {
-        focusModeText.text = currentTower.focusMode.ToString();
+        focusModeText.text = LocalizationManager.Tr(currentTower.focusMode.ToString());
     }
 
     void UpgradeTower()

@@ -84,14 +84,14 @@ public class TutorialManager : MonoBehaviour
     {
         TutorialSlide slide = slides[index];
 
-        titleText.text = slide.title;
+        titleText.text = LocalizationManager.Tr(slide.title);
         slideCounterText.text = $"{index + 1} / {slides.Length}";
 
         if (slide.image != null)
             slideImage.sprite = slide.image;
 
         // Typewriter
-        fullText = slide.description;
+        fullText = LocalizationManager.Tr(slide.description);
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
         typingCoroutine = StartCoroutine(TypeText(fullText));
 
@@ -129,7 +129,7 @@ public class TutorialManager : MonoBehaviour
     }
 
 
-    // Llamado desde el botón de pausa in-game
+    // Llamado desde el botï¿½n de pausa in-game
     public static bool IsTutorialDone()
     {
         return PlayerPrefs.GetInt("tutorial_done", 0) == 1;
