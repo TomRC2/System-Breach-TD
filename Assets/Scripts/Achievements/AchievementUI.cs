@@ -34,7 +34,7 @@ public class AchievementUI : MonoBehaviour
             iconImage.sprite = data.icon;
 
         if (nameText != null)
-            nameText.text = data.achievementName;
+            nameText.text = LocalizationManager.Tr(data.achievementName);
 
         if (data.type == AchievementType.Single)
             RefreshSingle();
@@ -50,7 +50,7 @@ public class AchievementUI : MonoBehaviour
             backgroundImage.color = completed ? unlockedColor : lockedColor;
 
         if (progressText != null)
-            progressText.text = completed ? "Completed!" : "Not yet...";
+            progressText.text = completed ? LocalizationManager.Tr("Completed!") : LocalizationManager.Tr("Not yet...");
 
         if (progressBar != null)
             progressBar.value = completed ? 1f : 0f;
@@ -77,7 +77,7 @@ public class AchievementUI : MonoBehaviour
         if (tierText != null)
         {
             tierText.gameObject.SetActive(true);
-            tierText.text = maxed ? "MAX" : data.tiers[currentTier].label;
+            tierText.text = maxed ? LocalizationManager.Tr("MAX") : data.tiers[currentTier].label;
         }
 
         // Barra y contador
@@ -92,7 +92,7 @@ public class AchievementUI : MonoBehaviour
         else
         {
             if (progressBar != null) progressBar.value = 1f;
-            if (progressText != null) progressText.text = "Completed!";
+            if (progressText != null) progressText.text = LocalizationManager.Tr("Completed!");
         }
 
         // Botón de claim

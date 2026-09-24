@@ -17,8 +17,15 @@ public class HUDManager : MonoBehaviour
     [Header("Score")]
     public TMP_Text scoreText;
 
+    private int lastWaveCurrent = 1, lastWaveTotal = 1;
+    private int lastMoney = 0;
+    private int lastScore = 0;
+
     void Start()
     {
+        if (LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged += RefreshTexts;
+
         ComputerHealth computer = FindFirstObjectByType<ComputerHealth>();
         if (computer != null)
         {
@@ -56,26 +63,38 @@ public class HUDManager : MonoBehaviour
 
     void UpdateWave(int current, int total)
     {
+        lastWaveCurrent = current;
+        lastWaveTotal = total;
         if (waveText != null)
-            waveText.text = $"Wave {current}/{total}";
+            waveText.text = string.Format(LocalizationManager.Tr("Wave {0}/{1}"), current, total);
     }
 
     void UpdateMoney(int amount)
     {
+        lastMoney = amount;
         if (moneyText != null)
         {
-            moneyText.text = $"RAM: ${amount}";
+            moneyText.text = string.Format(LocalizationManager.Tr("RAM: ${0}"), amount);
             Punch(moneyText.transform);
         }
     }
 
     void UpdateScore(int score)
     {
+        lastScore = score;
         if (scoreText != null)
         {
-            scoreText.text = $"Score: {score}";
+            scoreText.text = string.Format(LocalizationManager.Tr("Score: {0}"), score);
             Punch(scoreText.transform);
         }
+    }
+
+    // Re-formatea los textos ya mostrados si el idioma cambia en pleno gameplay
+    void RefreshTexts()
+    {
+        if (waveText != null) waveText.text = string.Format(LocalizationManager.Tr("Wave {0}/{1}"), lastWaveCurrent, lastWaveTotal);
+        if (moneyText != null) moneyText.text = string.Format(LocalizationManager.Tr("RAM: ${0}"), lastMoney);
+        if (scoreText != null) scoreText.text = string.Format(LocalizationManager.Tr("Score: {0}"), lastScore);
     }
 
     // Pequenio efecto de escala al cambiar un valor del HUD

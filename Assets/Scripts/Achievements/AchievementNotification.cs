@@ -43,19 +43,19 @@ public class AchievementNotification : MonoBehaviour
             iconImage.sprite = data.icon;
 
         if (achievementNameText != null)
-            achievementNameText.text = data.achievementName;
+            achievementNameText.text = LocalizationManager.Tr(data.achievementName);
         Debug.Log($"Show notification: {data.achievementName}");
         if (tierText != null)
         {
             if (tier >= 0 && tier < data.tiers.Length)
             {
                 tierText.gameObject.SetActive(true);
-                tierText.text = $"Tier {data.tiers[tier].label} unlocked!";
+                tierText.text = string.Format(LocalizationManager.Tr("Tier {0} unlocked!"), data.tiers[tier].label);
             }
             else
             {
                 tierText.gameObject.SetActive(true);
-                tierText.text = "Unlocked!";
+                tierText.text = LocalizationManager.Tr("Unlocked!");
             }
         }
 

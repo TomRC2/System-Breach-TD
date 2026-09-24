@@ -67,12 +67,12 @@ public class GameManager : MonoBehaviour
             int highscore = ScoreManager.Instance.SaveAndGetHighscore(levelNumber);
 
             if (victoryScoreText != null)
-                victoryScoreText.text = $"Puntaje: {score}";
+                victoryScoreText.text = string.Format(LocalizationManager.Tr("Score: {0}"), score);
 
             if (victoryHighscoreText != null)
                 victoryHighscoreText.text = score >= highscore
-                    ? "¡Nuevo récord!"
-                    : $"Récord: {highscore}";
+                    ? LocalizationManager.Tr("New Record!")
+                    : string.Format(LocalizationManager.Tr("Record: {0}"), highscore);
         }
         if (EconomyManager.Instance.GetTotalSpent() <= 750)
             AchievementManager.Instance?.RegisterFrugal();
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
 
         if (ScoreManager.Instance != null && gameOverScoreText != null)
-            gameOverScoreText.text = $"Puntaje: {ScoreManager.Instance.GetScore()}";
+            gameOverScoreText.text = string.Format(LocalizationManager.Tr("Score: {0}"), ScoreManager.Instance.GetScore());
 
         PanelFX.Show(gameOverPanel);
     }

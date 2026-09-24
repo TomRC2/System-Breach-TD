@@ -63,7 +63,7 @@ public class TowerSelectionPanel : MonoBehaviour
     {
         if (!buttonLabels.ContainsKey(data)) return;
         int cost = data.GetEffectiveCost();
-        buttonLabels[data].label.text = $"{data.towerName}\n${cost}";
+        buttonLabels[data].label.text = $"{LocalizationManager.Tr(data.towerName)}\n${cost}";
         buttonLabels[data].button.interactable = EconomyManager.Instance.CanAfford(cost);
     }
 

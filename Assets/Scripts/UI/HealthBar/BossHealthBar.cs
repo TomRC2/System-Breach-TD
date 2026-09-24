@@ -33,7 +33,7 @@ public class BossHealthBar : MonoBehaviour
         trackedBoss = boss;
 
         if (bossNameText != null)
-            bossNameText.text = !string.IsNullOrEmpty(boss.displayName) ? boss.displayName : "BOSS";
+            bossNameText.text = !string.IsNullOrEmpty(boss.displayName) ? LocalizationManager.Tr(boss.displayName) : LocalizationManager.Tr("BOSS");
 
         UpdateBar(boss.maxHP, boss.maxHP);
         panel.SetActive(true);

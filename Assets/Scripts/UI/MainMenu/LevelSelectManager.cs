@@ -38,8 +38,8 @@ public class LevelSelectManager : MonoBehaviour
                 {
                     int highscore = ScoreManager.GetHighscore(levelIndex);
                     label.text = highscore > 0
-                        ? $"Level {levelIndex}\n<size=55%>Best: {highscore}</size>"
-                        : $"Level {levelIndex}";
+                        ? string.Format(LocalizationManager.Tr("Level {0}\n<size=55%>Best: {1}</size>"), levelIndex, highscore)
+                        : string.Format(LocalizationManager.Tr("Level {0}"), levelIndex);
                 }
             }
 
